@@ -39,7 +39,47 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
 .filebtn{position:relative;overflow:hidden}
 .filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+.wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+/* tabs */
+html{padding-bottom:0}
+body{padding-block:20px 96px}
+.page{display:none}.page.on{display:flex;flex-direction:column;gap:32px}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:transparent;border:0;color:var(--muted);font:500 10.5px var(--f-body);padding:4px 2px;border-radius:8px;cursor:pointer;min-width:0}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-selected="true"]{color:var(--accent)}
+.tab:focus-visible{outline:2px solid var(--accent)}
+/* figures */
+.fig{display:flex;gap:6px;align-items:flex-end}
+.fig svg{width:100%;max-width:200px;height:auto;flex:1;min-width:0}
+.fig{justify-content:center}
+.fig svg .st{stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.fig svg .hd{fill:var(--ink)}
+.fig svg .pr{stroke:var(--muted);stroke-width:2.5;stroke-linecap:round;fill:none}
+.fig svg .pf{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.fig svg .ar{stroke:var(--mark);stroke-width:2.5;fill:none;stroke-linecap:round}
+.ex-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.ex-card .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.ex-card .sets{font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:var(--accent);white-space:nowrap}
+.ex-card .how{font-size:13.5px;color:var(--muted)}
+.ex-card .how b{color:var(--ink);font-weight:600}
+.ex-card .cues{margin:0;padding-left:18px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.ex-card .stage{font-size:12.5px;padding:6px 10px;border-radius:6px;background:var(--accent-soft);color:var(--accent);font-weight:500}
+.ex-card .stage.dl{background:var(--mark-soft);color:var(--mark)}
+.ex-list{display:flex;flex-direction:column;gap:12px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font:500 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.targets{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:13px}
+.targets .nm{color:var(--muted)}
+.targets .tg{font-family:var(--f-mono);font-size:12.5px;text-align:right;white-space:nowrap}
+.wk details{grid-column:1 / -1}
+.wk summary{font-size:12.5px;color:var(--accent);cursor:pointer;list-style:none;font-weight:500}
+.wk summary::-webkit-details-marker{display:none}
+.wk details[open] summary{margin-bottom:8px}
+.alert{border-left:3px solid var(--mark);padding:10px 12px;background:var(--mark-soft);border-radius:0 8px 8px 0;font-size:13.5px}
+.alert b{font-weight:600}
+
 h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0}
 h1{font-size:clamp(26px,6vw,38px);line-height:1.1}
 h2{font-size:19px;line-height:1.25}
@@ -141,22 +181,21 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
 <div class="wrap">
   <header class="head">
     <span class="eyebrow">5 октября — 27 декабря 2026 · 12 недель</span>
-    <h1>Сушка 74→72</h1>
-    <p class="lede">Медленная сушка на 2550 ккал без потери силы. Взвешивайся 3–4 раза в неделю утром натощак, отмечай тренировки, раз в четыре недели делай замеры. Записи хранятся в этом телефоне, работает без интернета.</p>
+    <h1>Сушка</h1>
   </header>
 
-  <div class="status" id="status" aria-live="polite">
-    <div><span class="eyebrow">Неделя</span><span class="v" id="st-week">1 / 12</span><span class="s" id="st-phase">Втягивание</span></div>
-    <div><span class="eyebrow">Средний вес</span><span class="v" id="st-avg">—</span><span class="s" id="st-avg-s">за последние 7 дней</span></div>
-    <div><span class="eyebrow">С начала</span><span class="v" id="st-delta">—</span><span class="s" id="st-from">от 74,5 кг</span></div>
-    <div><span class="eyebrow">Коридор сейчас</span><span class="v" id="st-band">—</span><span class="s" id="st-band-s">к концу недели</span></div>
-  </div>
-
-  <section aria-labelledby="h-weight">
-    <div class="head"><h2 id="h-weight">Вес</h2></div>
+  <!-- ===== Сегодня ===== -->
+  <section class="page on" id="p-today" role="tabpanel">
+    <div class="status" id="status" aria-live="polite">
+      <div><span class="eyebrow">Неделя</span><span class="v" id="st-week">1 / 12</span><span class="s" id="st-phase">Втягивание</span></div>
+      <div><span class="eyebrow">Средний вес</span><span class="v" id="st-avg">—</span><span class="s" id="st-avg-s">за последние 7 дней</span></div>
+      <div><span class="eyebrow">С начала</span><span class="v" id="st-delta">—</span><span class="s" id="st-from">от 74,0 кг</span></div>
+      <div><span class="eyebrow">Коридор сейчас</span><span class="v" id="st-band">—</span><span class="s" id="st-band-s">к концу недели</span></div>
+    </div>
+    <div class="alert" id="verdict"></div>
     <form class="entry" id="f-entry" autocomplete="off">
       <div class="field"><label for="in-date">Дата</label><input type="date" id="in-date" required min="2026-09-28" max="2027-01-10"></div>
-      <div class="field"><label for="in-kg">Вес, кг</label><input type="number" id="in-kg" step="0.1" min="40" max="120" inputmode="decimal" placeholder="74.5" required></div>
+      <div class="field"><label for="in-kg">Вес, кг</label><input type="number" id="in-kg" step="0.1" min="40" max="120" inputmode="decimal" placeholder="75.5" required></div>
       <div class="field"><label for="in-waist">Талия, см <span class="muted">(раз в 2 недели)</span></label><input type="number" id="in-waist" step="0.5" min="50" max="120" inputmode="decimal" placeholder="—"></div>
       <button class="btn" type="submit">Записать</button>
       <p class="note" id="entry-note" style="flex-basis:100%">Запись за ту же дату заменяет старую.</p>
@@ -166,97 +205,66 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
       <span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>коридор −0,2…−0,35 кг/нед</span>
       <span><i style="background:var(--ink);height:3px;vertical-align:3px"></i>среднее за 7 дней</span>
       <span><i style="background:var(--muted);width:8px;height:8px;border-radius:50%"></i>взвешивания</span>
-      <span><i style="border-top:2px dashed var(--mark);height:0;vertical-align:4px"></i>71,5 — точка пересмотра</span>
+      <span><i style="border-top:2px dashed var(--mark);height:0;vertical-align:4px"></i>точка пересмотра</span>
     </div>
     <div class="recent" id="recent"></div>
+    <div>
+      <h2 style="margin-bottom:10px">Сегодня по плану</h2>
+      <div class="ex-list" id="today-plan"></div>
+    </div>
   </section>
 
-  <section aria-labelledby="h-weeks">
+  <!-- ===== Недели ===== -->
+  <section class="page" id="p-weeks" role="tabpanel">
     <div class="head">
-      <h2 id="h-weeks">12 недель</h2>
-      <p class="lede">Отмечай сделанные тренировки. Справа средний вес недели — именно по нему решаешь, менять ли калории.</p>
+      <h2>12 недель</h2>
+      <p class="lede">Отмечай сделанные тренировки. Справа средний вес недели. Раскрой «Что уметь», чтобы увидеть цели по упражнениям на эту неделю.</p>
     </div>
     <div class="weeks" id="weeks"></div>
   </section>
 
-  <section aria-labelledby="h-tests">
+  <!-- ===== Тренировки ===== -->
+  <section class="page" id="p-train" role="tabpanel">
     <div class="head">
-      <h2 id="h-tests">Чек-поинты</h2>
-      <p class="lede">Замеры делай на свежую голову: в субботу на площадке до обратной пробежки или в понедельник. Можно писать текстом: «с резиной», «стул 45 см».</p>
+      <h2>Тренировки</h2>
+      <p class="lede">Запас 1–2 повтора в каждом подходе, не до отказа. Цифры под каждым упражнением — цель на текущую неделю.</p>
+    </div>
+    <div class="seg" id="day-seg" role="tablist"></div>
+    <p class="muted" id="day-where" style="font-size:13.5px"></p>
+    <div class="ex-list" id="ex-list"></div>
+  </section>
+
+  <!-- ===== Замеры ===== -->
+  <section class="page" id="p-tests" role="tabpanel">
+    <div class="head">
+      <h2>Чек-поинты</h2>
+      <p class="lede">Замеры делай свежим: в субботу на площадке до обратной пробежки или в понедельник. Можно писать текстом: «с резиной», «стул 45 см».</p>
     </div>
     <div class="tablebox"><table id="tests"></table></div>
   </section>
 
-  <section aria-labelledby="h-prog">
+  <!-- ===== Ещё ===== -->
+  <section class="page" id="p-more" role="tabpanel">
     <div class="head">
-      <h2 id="h-prog">Тренировки</h2>
-      <p class="lede">Запас 1–2 повтора в каждом подходе, не до отказа. Сделал все подходы в верхней границе — в следующий раз вариант сложнее или больше веса.</p>
-    </div>
-    <div class="prog">
-      <article class="card">
-        <span class="eyebrow">Понедельник · площадка · ~45 мин</span>
-        <h3>Тяга и брусья</h3>
-        <p class="where">Если идёшь пешком, возьми рюкзак с 5–8 кг (бутылки воды) для подтягиваний и брусьев.</p>
-        <ol class="ex">
-          <li><span>Разминка</span><span class="sets">8 мин</span><span class="hint">Кисти, плечи, лопаточные подтягивания 2×10, 5 лёгких подтягиваний.</span></li>
-          <li><span>Взрывные подтягивания до груди</span><span class="sets">5×3–5</span><span class="hint">Вверх максимально быстро. Дошёл до 5×5 чисто — начинай попытки выхода силой с резиной.</span></li>
-          <li><span>Подтягивания с рюкзаком</span><span class="sets">4×5–8</span><span class="hint">Без рюкзака — «лучник», 4×4–6 на сторону.</span></li>
-          <li><span>Брусья</span><span class="sets">4×6–12</span><span class="hint">Сделал 4×12 — надевай рюкзак.</span></li>
-          <li><span>Фронт-левер в группировке</span><span class="sets">4×10–20 с</span></li>
-          <li><span>Подъём ног к перекладине</span><span class="sets">3×6–10</span></li>
-        </ol>
-        <p class="note">Отдых 2–3 мин в упражнениях 2–4, остальное 1–1,5 мин.</p>
-      </article>
-      <article class="card">
-        <span class="eyebrow">Понедельник · дома · ~30 мин</span>
-        <h3>Ноги и стойка</h3>
-        <p class="where">Гиря, резина, кирпичи. Если в понедельник борьба — делай только этот блок, после неё или вечером.</p>
-        <ol class="ex">
-          <li><span>Стойка у стены, грудью к стене</span><span class="sets">5×20–60 с</span></li>
-          <li><span>Пистолет на опору</span><span class="sets">3×5–8/нога</span><span class="hint">Садись на стул или диван, со временем опора ниже. Пока тяжело — болгарские выпады с гирей 3×8–10.</span></li>
-          <li><span>Румынская тяга на одной ноге с гирей</span><span class="sets">3×8–10/нога</span></li>
-          <li><span>Отжимания углом</span><span class="sets">3×6–10</span><span class="hint">Ноги на стуле, руки на кирпичах — путь к отжиманиям в стойке.</span></li>
-          <li><span>Уголок на кирпичах</span><span class="sets">4×10–20 с</span><span class="hint">Сначала поджатые колени, потом одна нога прямая, потом обе.</span></li>
-        </ol>
-      </article>
-      <article class="card">
-        <span class="eyebrow">Суббота · 2,8 км → площадка → 5,7 км</span>
-        <h3>Жим, кор и бег</h3>
-        <p class="where">Ноги после пробежки разогреты, руки нет: 3–4 минуты на плечи и кисти обязательно.</p>
-        <ol class="ex">
-          <li><span>Подтягивания с паузой 1 с вверху</span><span class="sets">4×6–10</span></li>
-          <li><span>Брусья, вниз медленно 3 с</span><span class="sets">4×8–12</span></li>
-          <li><span>Отжимания с наклоном вперёд (псевдо-планш)</span><span class="sets">3×6–10</span><span class="hint">Пальцы рук смотрят в стороны или назад, плечи впереди кистей.</span></li>
-          <li><span>Уголок на брусьях, держать</span><span class="sets">4×10–20 с</span><span class="hint">Замена твоему 3×17: держишь вместо повторов.</span></li>
-          <li><span>Колени к локтям или носки к перекладине</span><span class="sets">3×6–10</span></li>
-        </ol>
-        <p class="note">Обратно 5,7 км лёгким темпом, в котором можно разговаривать. Попей воды на площадке. По желанию вечером дома: тяга гири в наклоне 3×10–12 медленно и разведение резины 3×15.</p>
-      </article>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-rules">
-    <div class="head">
-      <h2 id="h-rules">Когда менять калории</h2>
+      <h2>Когда менять калории</h2>
       <p class="lede">Смотри на средний вес за неделю, не на одно взвешивание. Белок 130–150 г, жиры 65–75 г, остальное углеводы — больше всего до и после борьбы.</p>
     </div>
     <div class="rules">
       <div><span class="if">−0,2…−0,35 кг/нед</span><span class="then">Всё по плану, ничего не меняй.</span></div>
       <div><span class="if">быстрее −0,5 кг/нед</span><span class="then">Добавь 150–200 ккал, лучше углеводами.</span></div>
-      <div><span class="if">вес стоит 2–3 недели</span><span class="then">Убери 100–150 ккал или добавь 2–3 тысячи шагов в день.</span></div>
+      <div><span class="if">вес стоит 2–3 недели</span><span class="then">Убери 150 ккал (до 2350–2400) или добавь 2–3 тысячи шагов в день.</span></div>
+      <div><span class="if">после читмила</span><span class="then">Вес стоит 3–5 дней из-за воды и гликогена. Не трогай калории, жди.</span></div>
       <div><span class="if">сила падает 2 недели</span><span class="then">Добавь 150–200 ккал и проверь сон — нужно 7,5–9 часов.</span></div>
-      <div><span class="if">средний вес ≈71,5</span><span class="then">Посмотри в зеркало и на талию. Если доволен — выходи на поддержку.</span></div>
+      <div><span class="if">средний вес ≈ цель</span><span class="then">Посмотри в зеркало и на талию. Если доволен — выходи на поддержку.</span></div>
     </div>
-  </section>
-
-  <section aria-labelledby="h-backup">
     <div class="head">
-      <h2 id="h-backup">Настройки и копия</h2>
-      <p class="lede">Записи живут только в этом телефоне. Раз в пару недель сохраняй копию в «Файлы»: если переустановишь приложение или сменишь телефон, восстановишь из неё.</p>
+      <h2>Настройки и копия</h2>
+      <p class="lede">Записи живут только в этом телефоне. Раз в пару недель сохраняй копию в «Файлы».</p>
     </div>
     <div class="entry">
       <div class="field"><label for="in-start">Стартовый вес, кг</label><input type="number" id="in-start" step="0.1" min="40" max="120" inputmode="decimal"></div>
-      <p class="note" style="flex-basis:100%">От него считается коридор цели (−0,2…−0,35 кг в неделю) и графа «С начала».</p>
+      <div class="field"><label for="in-goal">Точка пересмотра, кг</label><input type="number" id="in-goal" step="0.1" min="40" max="120" inputmode="decimal"></div>
+      <p class="note" style="flex-basis:100%">От старта считается коридор цели (−0,2…−0,35 кг в неделю). Дойдя до точки пересмотра, решаешь: сушить дальше или выходить на поддержку.</p>
     </div>
     <div class="backup">
       <button class="btn" type="button" id="btn-export">Сохранить копию</button>
@@ -266,11 +274,19 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   </section>
 </div>
 
+<nav class="tabs" role="tablist" aria-label="Разделы">
+  <button class="tab" role="tab" data-page="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 5-7 4 5"/><path d="M3 21h18"/></svg>Сегодня</button>
+  <button class="tab" role="tab" data-page="weeks" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Недели</button>
+  <button class="tab" role="tab" data-page="train" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 10v4M20 10v4M7 8v8M17 8v8M7 12h10"/></svg>Тренировки</button>
+  <button class="tab" role="tab" data-page="tests" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-5"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg>Замеры</button>
+  <button class="tab" role="tab" data-page="more" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>Ещё</button>
+</nav>
+
 <script>
 (function(){
   const START = new Date(2026, 9, 5);
   const DAY = 864e5;
-  let START_KG = 74.5;
+  let START_KG = 74.0, GOAL_KG = 71.5;
   const MON = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
   const pad = n => String(n).padStart(2,'0');
   const iso = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
@@ -299,6 +315,95 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     {k:'tue', d:'Вт', w:'танцы'}, {k:'wed', d:'Ср', w:'борьба'}, {k:'thu', d:'Чт', w:'танцы'},
     {k:'fri', d:'Пт', w:'борьба'}, {k:'sat', d:'Сб', w:'бег + площадка'},
   ];
+// Poses for stick-figure illustrations. Canvas 160x110, side view.
+// Each pose: h=head center, s=shoulder, hp=hip, arms: [[e,w],...], legs: [[k,f],...], props.
+const POSES = {
+  pull_bottom: {h:[80,38],s:[80,50],hp:[80,80],arms:[[[72,30],[66,12]],[[88,30],[94,12]]],legs:[[[80,100],[82,108]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  pull_top:    {h:[80,22],s:[80,34],hp:[80,64],arms:[[[64,26],[66,12]],[[96,26],[94,12]]],legs:[[[84,86],[80,104]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  ctb_top:     {h:[80,14],s:[80,26],hp:[82,56],arms:[[[60,24],[66,12]],[[100,24],[94,12]]],legs:[[[90,78],[84,98]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12},{t:'arrow',x:110,y1:50,y2:20}]},
+  wpull:       {h:[80,36],s:[80,48],hp:[80,78],arms:[[[72,30],[66,12]],[[88,30],[94,12]]],legs:[[[80,96],[78,104]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12},{t:'kb',x:80,y:104}]},
+  dip_top:     {h:[80,28],s:[80,40],hp:[80,70],arms:[[[70,56],[62,56]],[[90,56],[100,56]]],legs:[[[76,88],[70,104]]],props:[{t:'pbar',x:60,y:56},{t:'pbar',x:100,y:56}]},
+  dip_bottom:  {h:[80,44],s:[80,56],hp:[82,84],arms:[[[62,44],[62,56]],[[100,44],[100,56]]],legs:[[[76,100],[68,108]]],props:[{t:'pbar',x:62,y:56},{t:'pbar',x:100,y:56}]},
+  fl_tuck:     {h:[60,52],s:[72,50],hp:[100,48],arms:[[[76,30],[80,12]]],legs:[[[96,66],[82,66]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  fl_half:     {h:[52,52],s:[66,50],hp:[96,48],arms:[[[74,30],[80,12]]],legs:[[[112,62],[108,78]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  t2b_knees:   {h:[80,32],s:[80,44],hp:[80,74],arms:[[[72,28],[66,12]],[[88,28],[94,12]]],legs:[[[62,56],[64,74]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  t2b_full:    {h:[82,32],s:[80,44],hp:[78,74],arms:[[[72,28],[66,12]],[[88,28],[94,12]]],legs:[[[60,50],[52,20]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
+  hs_wall:     {h:[70,96],s:[70,84],hp:[72,54],arms:[[[70,100],[70,106]]],legs:[[[74,26],[76,6]]],props:[{t:'wall',x:80},{t:'floor',y:106}]},
+  pistol_box:  {h:[70,30],s:[70,42],hp:[76,72],arms:[[[50,50],[32,56]]],legs:[[[62,88],[64,106]],[[40,60],[22,66]]],props:[{t:'box',x:72,y:72,w:30,h:34},{t:'floor',y:106}]},
+  pistol_free: {h:[66,34],s:[66,46],hp:[76,80],arms:[[[48,52],[30,58]]],legs:[[[60,96],[64,106]],[[40,70],[20,74]]],props:[{t:'floor',y:106}]},
+  rdl:         {h:[46,44],s:[58,46],hp:[88,52],arms:[[[62,66],[64,88]]],legs:[[[90,78],[92,106]],[[112,46],[136,42]]],props:[{t:'floor',y:106},{t:'kb',x:64,y:96}]},
+  pike:        {h:[54,78],s:[60,66],hp:[90,30],arms:[[[52,90],[48,104]]],legs:[[[118,42],[132,56]]],props:[{t:'box',x:120,y:56,w:28,h:50},{t:'floor',y:106}]},
+  pike_bottom: {h:[52,92],s:[60,76],hp:[90,32],arms:[[[42,88],[48,104]]],legs:[[[118,44],[132,56]]],props:[{t:'box',x:120,y:56,w:28,h:50},{t:'floor',y:106}]},
+  lsit_knee:   {h:[70,34],s:[70,46],hp:[72,78],arms:[[[70,66],[70,86]]],legs:[[[92,66],[96,80]]],props:[{t:'brick',x:60,y:86},{t:'floor',y:106}]},
+  lsit_full:   {h:[70,34],s:[70,46],hp:[72,78],arms:[[[70,66],[70,86]]],legs:[[[100,76],[128,76]]],props:[{t:'brick',x:60,y:86},{t:'floor',y:106}]},
+  pplanche:    {h:[44,70],s:[56,72],hp:[100,70],arms:[[[62,88],[70,104]]],legs:[[[124,74],[144,100]]],props:[{t:'floor',y:106},{t:'arrow',x:40,y1:60,y2:60,h:true}]},
+  row:         {h:[50,42],s:[62,46],hp:[94,54],arms:[[[68,66],[66,84]]],legs:[[[100,80],[104,106]]],props:[{t:'floor',y:106},{t:'kb',x:66,y:92}]},
+  rope:        {h:[80,30],s:[80,42],hp:[82,72],arms:[[[70,28],[80,10]],[[92,52],[80,40]]],legs:[[[70,90],[82,96]]],props:[{t:'rope',x:80}]},
+};
+
+  // Stage index per week: 0 = w1-3, 1 = w4-6, 2 = deload w7, 3 = w8-9, 4 = w10-12
+  const stageOf = w => w <= 3 ? 0 : w <= 6 ? 1 : w === 7 ? 2 : w <= 9 ? 3 : 4;
+  const STAGE_NAME = ['Втягивание, нед 1–3', 'Прогресс, нед 4–6', 'Разгрузка, нед 7', 'Прогресс 2, нед 8–9', 'Финал, нед 10–12'];
+  // Each exercise: name, poses (1-2), how, cues, targets[5] (deload computed when null)
+  const EX = {
+    ctb:   {n:'Взрывные подтягивания до груди', p:['pull_bottom','ctb_top'], how:'Из виса <b>рывком</b> тяни так, чтобы перекладина дошла до груди, а не до подбородка. Вниз — спокойно, с полным выпрямлением рук.', cues:['Сначала лопатки вниз, потом локти к бокам','Таз чуть вперёд, тело не раскачивай','Если не достаёшь до груди — тяни максимально быстро до подбородка'], t:['5×3 до подбородка быстро','5×4, перекладина у ключиц','3×3','5×5 у груди','попытки выхода силой с резиной 5×2']},
+    wpull: {n:'Подтягивания с весом', p:['wpull','pull_top'], how:'Гирю или рюкзак с водой зажми стопами. Хват чуть шире плеч. Подбородок над перекладиной, вниз медленно.', cues:['Без веса — делай с паузой 1 с вверху','Полная амплитуда: руки прямые внизу','Запас 1–2 повтора в каждом подходе'], t:['4×6 без веса, пауза вверху','4×5 с 5 кг','2×5 с 5 кг','4×6 с 8 кг','4×8 с 8 кг']},
+    dips:  {n:'Брусья', p:['dip_top','dip_bottom'], how:'Плечи опускаются <b>ниже локтей</b>, корпус чуть наклонён вперёд. Вверху руки прямые, плечи вниз, не вжимай голову.', cues:['Локти назад, не в стороны','Вниз 2–3 секунды','Болит грудина спереди — не опускайся так глубоко'], t:['4×8','4×10','2×8','4×12','4×8 с 5 кг']},
+    fl:    {n:'Фронт-левер в группировке', p:['fl_tuck','fl_half'], how:'Вис на прямых руках, колени к груди, <b>таз подними до уровня плеч</b>, спина параллельна земле. Держи.', cues:['Руки прямые, лопатки тянешь вниз','Смотри вверх, не на ноги','Тяжело — резину через турник под стопы'], t:['4×10 с группировка','4×15 с','2×10 с','4×20 с','полугруппировка 4×8 с']},
+    t2b:   {n:'Колени / носки к перекладине', p:['t2b_knees','t2b_full'], how:'В висе подними колени к груди, потом таз закручивается вверх. Со временем — прямые ноги к перекладине.', cues:['Вниз медленно, без раскачки','Внизу короткая остановка в висе','Это замена твоему уголку 3×17'], t:['3×6 колени к груди','3×8 колени','2×6','3×6 прямые ноги','3×10 носки к перекладине']},
+    hs:    {n:'Стойка у стены', p:['hs_wall'], how:'<b>Грудью к стене</b>: ладони в 10–15 см от стены, заходишь ногами по стене. Тело в одну линию, смотри в пол между ладонями.', cues:['Толкай пол, плечи к ушам','Живот подтянут, рёбра не торчат','Только свежим, в начале тренировки'], t:['5×20 с','5×35 с','3×20 с','5×45 с','5×60 с']},
+    pistol:{n:'Пистолет', p:['pistol_box','pistol_free'], how:'Присед на одной ноге, вторая вытянута вперёд. Сначала <b>садишься на стул</b>, потом опора всё ниже.', cues:['Пятка не отрывается','Колено идёт за носком, не внутрь','Руки вперёд для баланса, можно держать гирю у груди'], t:['3×5 на стул','3×8 на стул','2×5','3×5 на низкую опору','3×3 без опоры']},
+    rdl:   {n:'Румынская тяга на одной ноге', p:['rdl'], how:'Гиря в руке, наклон вперёд на одной ноге, вторая уходит назад. Спина прямая, <b>гиря скользит вдоль голени</b>.', cues:['Тянешься задней ногой назад, не вниз','Таз не раскрывается в сторону','Вверху сожми ягодицу'], t:['3×8 на ногу','3×10','2×8','3×10 вниз 3 с','3×12 вниз 3 с']},
+    pike:  {n:'Отжимания углом', p:['pike','pike_bottom'], how:'Ноги на стуле, таз высоко, тело буквой Л. Опускаешь <b>голову к полу между ладонями</b>, локти не в стороны.', cues:['Руки на кирпичах — глубже амплитуда','Взгляд в пол, не вперёд','Это путь к отжиманиям в стойке'], t:['3×6','3×8','2×6','3×10','3×6 ноги выше, полная амплитуда']},
+    lsit:  {n:'Уголок', p:['lsit_knee','lsit_full'], how:'Руки на кирпичах, плечи вниз, ноги оторваны. Сначала <b>колени поджаты</b>, потом одна нога прямая, потом обе.', cues:['Руки прямые, давишь в кирпичи','Спина круглая — нормально, таз подкручен','Держи суммарно, подходы короткие'], t:['4×10 с колени','4×10 с одна нога','2×10 с','4×8 с обе прямые','4×15 с']},
+    pplan: {n:'Отжимания с наклоном вперёд', p:['pplanche'], how:'Упор лёжа, пальцы в стороны или назад. <b>Плечи выведи вперёд за кисти</b> и отжимайся в таком положении.', cues:['Тело прямое, таз не висит','Чем дальше плечи вперёд, тем тяжелее','Болят запястья — на кулаках или кирпичах'], t:['3×6','3×8','2×6','3×10','3×6 с большим наклоном']},
+    pullp: {n:'Подтягивания с паузой', p:['pull_bottom','pull_top'], how:'Обычные подтягивания, но <b>1 секунда вверху</b>, подбородок над перекладиной, вниз 2 с.', cues:['Хват чуть шире плеч','Нет раскачки','Запас 1–2 повтора'], t:['4×6','4×8','2×6','4×10','4×10 с 5 кг']},
+    dipss: {n:'Брусья медленные', p:['dip_top','dip_bottom'], how:'Вниз <b>3 секунды</b>, внизу пауза, вверх обычным темпом.', cues:['Плечи ниже локтей','Корпус чуть вперёд'], t:['4×8','4×10','2×8','4×12','4×12 с 5 кг']},
+    lsitb: {n:'Уголок на брусьях, удержание', p:['lsit_knee','lsit_full'], how:'То же, что уголок дома, но на брусьях: <b>держишь, не повторы</b>.', cues:['Руки прямые','Носки на себя, колени в замке'], t:['4×10 с колени','4×10 с одна нога','2×10 с','4×8 с обе','4×15 с']},
+    row:   {n:'Тяга гири в наклоне', p:['row'], how:'Наклон 45°, спина прямая, гиря к поясу. <b>Вниз 3 секунды</b>, вверху пауза.', cues:['Локоть вдоль тела','Лопатку сводишь к позвоночнику'], t:['3×10 на руку','3×12','2×10','3×12 вниз 3 с','3×15 вниз 3 с']},
+    rope:  {n:'Канат', p:['rope'], how:'После борьбы, как обычно. Пока ладонь не зажила — с опорой ногами или пропусти.', cues:['Мозоли подпиливай раз в неделю'], t:['10 подъёмов','10','5','10','10 без ног']},
+  };
+  const DAYS_PLAN = [
+    {k:'mon_p', title:'Понедельник · площадка', where:'~45 мин. Если идёшь пешком, возьми рюкзак с 5–8 кг воды для подтягиваний и брусьев. Если в понедельник борьба — эту часть пропусти, сделай только «дома».', ex:['ctb','wpull','dips','fl','t2b'], warm:'Разминка 8 мин: кисти, плечи, лопаточные подтягивания 2×10, 5 лёгких подтягиваний.'},
+    {k:'mon_h', title:'Понедельник · дома', where:'~30 мин. Гиря, резина, кирпичи. После борьбы или вечером.', ex:['hs','pistol','rdl','pike','lsit'], warm:'Разминка 5 мин: круги кистями и плечами, 10 приседаний, 10 лёгких отжиманий.'},
+    {k:'sat', title:'Суббота · бег + площадка', where:'2,8 км до площадки, силовая, 5,7 км обратно лёгким темпом. Ноги после бега разогреты, руки нет: 3–4 минуты на плечи и кисти обязательно.', ex:['pullp','dipss','pplan','lsitb','t2b'], warm:'Разминка: кисти, плечи, 10 отжиманий, 10 лопаточных отжиманий.'},
+    {k:'home_opt', title:'Дома по желанию', where:'В любой свободный вечер, 15 минут.', ex:['row'], warm:''},
+  ];
+  const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h'], 2:[], 3:[], 4:[], 5:[], 6:['sat'], 0:[]};
+  const OTHER_DAYS = {2:'Танцы', 3:'Борьба', 4:'Танцы', 5:'Борьба + канат', 0:'Отдых. 15–20 минут растяжки по желанию.'};
+
+  // ---------- stick figures ----------
+  function figSvg(name){
+    const p = POSES[name]; if (!p) return '';
+    let s = '';
+    (p.props||[]).forEach(q => {
+      if (q.t==='bar') s += `<line class="pr" x1="${q.x1}" y1="${q.y1}" x2="${q.x2}" y2="${q.y2}"/>`;
+      else if (q.t==='pbar') s += `<line class="pr" x1="${q.x-14}" y1="${q.y}" x2="${q.x+14}" y2="${q.y}"/><line class="pr" x1="${q.x}" y1="${q.y}" x2="${q.x}" y2="108"/>`;
+      else if (q.t==='floor') s += `<line class="pr" x1="8" y1="${q.y}" x2="152" y2="${q.y}"/>`;
+      else if (q.t==='wall') s += `<line class="pr" x1="${q.x}" y1="4" x2="${q.x}" y2="106"/><line class="pr" x1="8" y1="106" x2="152" y2="106"/>`;
+      else if (q.t==='box') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="2"/>`;
+      else if (q.t==='brick') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="22" height="20" rx="2"/><rect class="pf" x="${q.x+8}" y="${q.y+6}" width="22" height="14" rx="2" opacity=".5"/>`;
+      else if (q.t==='kb') s += `<circle class="pf" cx="${q.x}" cy="${q.y}" r="7"/><path class="pr" d="M${q.x-5} ${q.y-5} a5 5 0 0 1 10 0"/>`;
+      else if (q.t==='rope') s += `<line class="pr" x1="${q.x}" y1="0" x2="${q.x}" y2="110" stroke-dasharray="3 3"/>`;
+      else if (q.t==='arrow') s += q.h ? `<path class="ar" d="M${q.x+16} ${q.y1} L${q.x} ${q.y1} M${q.x+6} ${q.y1-5} L${q.x} ${q.y1} L${q.x+6} ${q.y1+5}"/>` : `<path class="ar" d="M${q.x} ${q.y1} L${q.x} ${q.y2} M${q.x-5} ${q.y2+6} L${q.x} ${q.y2} L${q.x+5} ${q.y2+6}"/>`;
+    });
+    (p.legs||[]).forEach(l => { s += `<polyline class="st" points="${p.hp} ${l[0]} ${l[1]}"/>`; });
+    s += `<line class="st" x1="${p.s[0]}" y1="${p.s[1]}" x2="${p.hp[0]}" y2="${p.hp[1]}"/>`;
+    (p.arms||[]).forEach(a => { s += `<polyline class="st" points="${p.s} ${a[0]} ${a[1]}"/>`; });
+    s += `<circle class="hd" cx="${p.h[0]}" cy="${p.h[1]}" r="7"/>`;
+    return `<svg viewBox="0 0 160 110" aria-hidden="true">${s}</svg>`;
+  }
+  function exCard(k, week, compact){
+    const e = EX[k], st = stageOf(week);
+    const card = el('article', {class:'ex-card'});
+    card.innerHTML = `<div class="top"><h3>${e.n}</h3><span class="sets">${e.t[st]}</span></div>`
+      + `<div class="fig">${e.p.map(figSvg).join('')}</div>`
+      + `<p class="how">${e.how}</p>`
+      + (compact ? '' : `<ul class="cues">${e.cues.map(c=>'<li>'+c+'</li>').join('')}</ul>`)
+      + `<div class="stage${st===2?' dl':''}">${STAGE_NAME[st]}${st===2?' — подходов вдвое меньше':''}</div>`;
+    return card;
+  }
+
   const CPS = [
     {id:'t0', label:'Старт', week:1, when:'эта неделя'},
     {id:'t4', label:'Чек-поинт 1', week:4, when:'сб 31 окт'},
@@ -369,6 +474,38 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     const [lo, hi] = band(curWeek);
     $('st-band').textContent = kg(lo) + '–' + kg(hi);
     $('st-band-s').textContent = 'к концу ' + curWeek + '-й недели';
+    renderVerdict(); renderToday();
+  }
+  function renderVerdict(){
+    const v = $('verdict');
+    const list = entries(); if (list.length < 2){ v.innerHTML = '<b>Пока мало данных.</b> Взвешивайся 3–4 раза в неделю утром натощак, вывод появится сам.'; return; }
+    const last = list[list.length-1], li = idx(last.date);
+    const cur = list.filter(e => idx(e.date) > li-7).map(e=>e.kg), prev = list.filter(e => idx(e.date) > li-14 && idx(e.date) <= li-7).map(e=>e.kg);
+    const avg = a => a.reduce((x,y)=>x+y,0)/a.length;
+    const [lo, hi] = band(curWeek);
+    let msg;
+    if (prev.length){
+      const d = avg(cur) - avg(prev);
+      if (d < -0.6) msg = '<b>Слишком быстро:</b> −' + kg(-d) + ' кг за неделю. Если это не вода после читмила — добавь 150–200 ккал.';
+      else if (d <= -0.15) msg = '<b>В плане:</b> −' + kg(-d) + ' кг за неделю. Калории не трогай.';
+      else if (d < 0.15) msg = '<b>Вес стоит.</b> Если так вторую неделю подряд — убери 150 ккал или добавь шагов.';
+      else msg = '<b>Вес вырос</b> на ' + kg(d) + ' кг за неделю. После читмила подожди 3–5 дней, иначе убери 150 ккал.';
+    } else {
+      const a = avg(cur);
+      msg = a <= hi ? '<b>Ниже коридора или в нём.</b> Калории не трогай, оцени в воскресенье.' : '<b>Выше коридора</b> на ' + kg(a-hi) + ' кг. После читмила это вода, подожди до воскресенья.';
+    }
+    v.innerHTML = msg;
+  }
+  function renderToday(){
+    const box = $('today-plan'); box.textContent = '';
+    const dow = new Date().getDay();
+    const keys = DAY_OF_WEEK_PLAN[dow] || [];
+    if (!keys.length){ box.append(el('p', {class:'muted', text: OTHER_DAYS[dow] || 'Отдых'})); return; }
+    keys.forEach(k => {
+      const d = DAYS_PLAN.find(x => x.k === k);
+      box.append(el('h3', {text:d.title}));
+      d.ex.forEach(x => box.append(exCard(x, curWeek, true)));
+    });
   }
 
   function renderChart(){
@@ -376,7 +513,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     const W = 720, H = 270, L = 44, R = 14, T = 22, B = 30;
     const list = entries();
     const vals = list.map(e=>e.kg);
-    let yMin = Math.min(70, ...vals) , yMax = Math.max(75.5, ...vals);
+    let yMin = Math.min(START_KG-4.5, GOAL_KG-1, ...vals), yMax = Math.max(START_KG+1, ...vals);
     yMin = Math.floor(yMin - 0.2); yMax = Math.ceil(yMax + 0.2);
     const X = i => L + (i/84) * (W-L-R);
     const Y = v => T + (yMax - v)/(yMax - yMin) * (H-T-B);
@@ -395,7 +532,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     const [lo12, hi12] = band(12);
     s += `<polygon points="${X(0)},${Y(START_KG)} ${X(84)},${Y(hi12)} ${X(84)},${Y(lo12)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`;
     // review line
-    s += `<line x1="${L}" x2="${W-R}" y1="${Y(71.5)}" y2="${Y(71.5)}" stroke="var(--mark)" stroke-width="1.5" stroke-dasharray="6 5"/>`;
+    s += `<line x1="${L}" x2="${W-R}" y1="${Y(GOAL_KG)}" y2="${Y(GOAL_KG)}" stroke="var(--mark)" stroke-width="1.5" stroke-dasharray="6 5"/>`;
     // checkpoints
     [[0,'старт'],[26,'Ч1'],[49,'Ч2'],[82,'финал']].forEach(([i,t]) => {
       s += `<line x1="${X(i)}" x2="${X(i)}" y1="${T}" y2="${H-B}" stroke="var(--mark)" stroke-width="1" stroke-opacity=".6"/>`;
@@ -453,7 +590,11 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
         el('div', {}, [el('div', {class:'n', text:'Н'+n}), el('div', {class:'d', text: fmtD(s)+' – '+fmtD(e)})]),
         el('div', {class:'body'}, [
           el('div', {class:'ph'}, [el('span', {class:tagCls, text:wk.ph}), el('span', {class:'txt', text:wk.note})]),
-          days
+          days,
+          (() => { const st = stageOf(n); const det = el('details'); det.append(el('summary', {text:'Что уметь на этой неделе'}));
+            const g = el('div', {class:'targets'});
+            ['ctb','wpull','dips','fl','hs','pistol','pike','lsit','pplan','t2b'].forEach(k => { g.append(el('span', {class:'nm', text:EX[k].n}), el('span', {class:'tg', text:EX[k].t[st]})); });
+            det.append(g); return det; })()
         ]),
         el('div', {class:'side'}, [
           el('span', {class:'num', text: avg == null ? '—' : kg(avg)}),
@@ -474,8 +615,8 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     // weight row (auto)
     tb.append(el('tr', {}, [el('th', {}, ['Вес', el('small', {text:'средний за неделю, сам'})])].concat(CPS.map(c => {
       const [lo, hi] = band(c.week);
-      const td = el('td', {class:'auto'}); td.append(kg(weekAvg(c.week)), el('small', {text: c.week === 1 ? 'старт ≈74,5' : 'цель '+kg(lo)+'–'+kg(hi)})); return td;
-    })).concat([el('td', {class:'goal', text:'≈71,5–72,5'})])));
+      const td = el('td', {class:'auto'}); td.append(kg(weekAvg(c.week)), el('small', {text: c.week === 1 ? 'старт ≈' + kg(START_KG) : 'цель '+kg(lo)+'–'+kg(hi)})); return td;
+    })).concat([el('td', {class:'goal', text:'≈ ' + kg(GOAL_KG) + '–' + kg(GOAL_KG+1)})])));
     TESTS.forEach(tst => {
       tb.append(el('tr', {}, [el('th', {}, [tst.name, el('small', {text:tst.sub})])].concat(CPS.map(c => {
         const v = (state.tests[c.id] || {})[tst.k] || '';
@@ -520,9 +661,17 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   }
   function applySettings(){
     const s = parseFloat(state.settings && state.settings.startKg);
-    START_KG = isNaN(s) ? 74.5 : s;
-    $('in-start').value = START_KG;
+    START_KG = isNaN(s) ? 74.0 : s;
+    const g = parseFloat(state.settings && state.settings.goalKg);
+    GOAL_KG = isNaN(g) ? Math.round((START_KG - 2.5)*10)/10 : g;
+    $('in-start').value = START_KG; $('in-goal').value = GOAL_KG;
   }
+  $('in-goal').addEventListener('change', () => {
+    const v = parseFloat(String($('in-goal').value).replace(',', '.'));
+    if (isNaN(v) || v < 40 || v > 120) { applySettings(); return; }
+    state.settings = Object.assign({}, state.settings, {goalKg: Math.round(v*10)/10});
+    applySettings(); renderAll(); persist();
+  });
   $('in-start').addEventListener('change', () => {
     const v = parseFloat(String($('in-start').value).replace(',', '.'));
     if (isNaN(v) || v < 40 || v > 120) { applySettings(); return; }
@@ -577,6 +726,28 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     $('in-kg').value = ''; $('in-waist').value = '';
   });
 
+  // ---------- training page ----------
+  let dayKey = (new Date().getDay() === 6) ? 'sat' : 'mon_p';
+  function renderTrain(){
+    const seg = $('day-seg'); seg.textContent = '';
+    DAYS_PLAN.forEach(d => { const b = el('button', {type:'button', role:'tab', 'aria-pressed': d.k===dayKey ? 'true' : 'false', text: d.title.replace(' · ', ', ')}); b.addEventListener('click', () => { dayKey = d.k; renderTrain(); }); seg.append(b); });
+    const d = DAYS_PLAN.find(x => x.k === dayKey);
+    $('day-where').textContent = d.where + (d.warm ? ' ' + d.warm : '');
+    const list = $('ex-list'); list.textContent = '';
+    d.ex.forEach(k => list.append(exCard(k, curWeek, false)));
+  }
+
+  // ---------- tabs ----------
+  const PAGES = ['today','weeks','train','tests','more'];
+  function showPage(p){
+    if (!PAGES.includes(p)) p = 'today';
+    PAGES.forEach(q => { $('p-'+q).classList.toggle('on', q===p); });
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.page===p ? 'true' : 'false'));
+    try { localStorage.setItem(KEY+'-tab', p); } catch(e){}
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => showPage(t.dataset.page)));
+
   // ---------- boot ----------
   let loaded = false;
   try {
@@ -585,7 +756,8 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   } catch(e){}
   if (!loaded){ state.log = Object.assign({}, SEED.log); persist(); }
   applySettings();
-  renderAll();
+  renderAll(); renderTrain();
+  (() => { let p = 'today'; try { p = localStorage.getItem(KEY+'-tab') || 'today'; } catch(e){} if (location.hash.length > 1) p = location.hash.slice(1); showPage(p); })();
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
