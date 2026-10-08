@@ -50,14 +50,26 @@ body{padding-block:20px 96px}
 .tab[aria-selected="true"]{color:var(--accent)}
 .tab:focus-visible{outline:2px solid var(--accent)}
 /* figures */
-.fig{display:flex;gap:6px;align-items:flex-end}
-.fig svg{width:100%;max-width:200px;height:auto;flex:1;min-width:0}
+.fig{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.fig svg{width:100%;max-width:260px;height:auto;flex:1 1 170px;min-width:0}
 .fig{justify-content:center}
-.fig svg .st{stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.fig svg .ln{stroke:var(--ink);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.fig svg .lf{stroke:var(--muted);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;fill:none;opacity:.5}
+.fig svg .tor{fill:var(--ink)}
 .fig svg .hd{fill:var(--ink)}
-.fig svg .pr{stroke:var(--muted);stroke-width:2.5;stroke-linecap:round;fill:none}
+.fig svg .pr{fill:var(--muted)}
+.fig svg .pl{stroke:var(--muted);stroke-width:3;stroke-linecap:round;fill:none}
+.fig svg .pw{fill:var(--line)}
 .fig svg .pf{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
-.fig svg .ar{stroke:var(--mark);stroke-width:2.5;fill:none;stroke-linecap:round}
+.fig svg .pk{fill:var(--mark)}
+.fig svg .pkh{fill:none;stroke:var(--mark);stroke-width:2.5}
+.fig svg .ar{stroke:var(--mark);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig svg .nr{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:.6}
+.fig svg .nd{fill:var(--accent)}
+.fig .pose{margin:0;flex:1 1 150px;max-width:260px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.fig .pose svg{width:100%;max-width:none;flex:none}
+.fig figcaption{font-size:12px;color:var(--accent);line-height:1.3;display:flex;gap:6px;align-items:flex-start}
+.fig figcaption i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:4px}
 .ex-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
 .ex-card .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
 .ex-card .sets{font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:var(--accent);white-space:nowrap}
@@ -315,32 +327,33 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     {k:'tue', d:'Вт', w:'танцы'}, {k:'wed', d:'Ср', w:'борьба'}, {k:'thu', d:'Чт', w:'танцы'},
     {k:'fri', d:'Пт', w:'борьба'}, {k:'sat', d:'Сб', w:'бег + площадка'},
   ];
-// Poses for stick-figure illustrations. Canvas 160x110, side view.
-// Each pose: h=head center, s=shoulder, hp=hip, arms: [[e,w],...], legs: [[k,f],...], props.
+// Canvas 200x140. Side view. Coordinates: h=head, n=neck/shoulder, hp=hip,
+// arms: [[elbow, hand], ...] near arm first; legs: [[knee, foot], ...] near leg first.
+// props: bar, pbar(parallel bars), floor, wall, box, brick, kb (in hand), rope, band.
+// note: {x,y,text, ax,ay (arrow target)} — one cue per pose.
 const POSES = {
-  pull_bottom: {h:[80,38],s:[80,50],hp:[80,80],arms:[[[72,30],[66,12]],[[88,30],[94,12]]],legs:[[[80,100],[82,108]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  pull_top:    {h:[80,22],s:[80,34],hp:[80,64],arms:[[[64,26],[66,12]],[[96,26],[94,12]]],legs:[[[84,86],[80,104]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  ctb_top:     {h:[80,14],s:[80,26],hp:[82,56],arms:[[[60,24],[66,12]],[[100,24],[94,12]]],legs:[[[90,78],[84,98]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12},{t:'arrow',x:110,y1:50,y2:20}]},
-  wpull:       {h:[80,36],s:[80,48],hp:[80,78],arms:[[[72,30],[66,12]],[[88,30],[94,12]]],legs:[[[80,96],[78,104]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12},{t:'kb',x:80,y:104}]},
-  dip_top:     {h:[80,28],s:[80,40],hp:[80,70],arms:[[[70,56],[62,56]],[[90,56],[100,56]]],legs:[[[76,88],[70,104]]],props:[{t:'pbar',x:60,y:56},{t:'pbar',x:100,y:56}]},
-  dip_bottom:  {h:[80,44],s:[80,56],hp:[82,84],arms:[[[62,44],[62,56]],[[100,44],[100,56]]],legs:[[[76,100],[68,108]]],props:[{t:'pbar',x:62,y:56},{t:'pbar',x:100,y:56}]},
-  fl_tuck:     {h:[60,52],s:[72,50],hp:[100,48],arms:[[[76,30],[80,12]]],legs:[[[96,66],[82,66]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  fl_half:     {h:[52,52],s:[66,50],hp:[96,48],arms:[[[74,30],[80,12]]],legs:[[[112,62],[108,78]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  t2b_knees:   {h:[80,32],s:[80,44],hp:[80,74],arms:[[[72,28],[66,12]],[[88,28],[94,12]]],legs:[[[62,56],[64,74]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  t2b_full:    {h:[82,32],s:[80,44],hp:[78,74],arms:[[[72,28],[66,12]],[[88,28],[94,12]]],legs:[[[60,50],[52,20]]],props:[{t:'bar',x1:40,y1:12,x2:120,y2:12}]},
-  hs_wall:     {h:[70,96],s:[70,84],hp:[72,54],arms:[[[70,100],[70,106]]],legs:[[[74,26],[76,6]]],props:[{t:'wall',x:80},{t:'floor',y:106}]},
-  pistol_box:  {h:[70,30],s:[70,42],hp:[76,72],arms:[[[50,50],[32,56]]],legs:[[[62,88],[64,106]],[[40,60],[22,66]]],props:[{t:'box',x:72,y:72,w:30,h:34},{t:'floor',y:106}]},
-  pistol_free: {h:[66,34],s:[66,46],hp:[76,80],arms:[[[48,52],[30,58]]],legs:[[[60,96],[64,106]],[[40,70],[20,74]]],props:[{t:'floor',y:106}]},
-  rdl:         {h:[46,44],s:[58,46],hp:[88,52],arms:[[[62,66],[64,88]]],legs:[[[90,78],[92,106]],[[112,46],[136,42]]],props:[{t:'floor',y:106},{t:'kb',x:64,y:96}]},
-  pike:        {h:[54,78],s:[60,66],hp:[90,30],arms:[[[52,90],[48,104]]],legs:[[[118,42],[132,56]]],props:[{t:'box',x:120,y:56,w:28,h:50},{t:'floor',y:106}]},
-  pike_bottom: {h:[52,92],s:[60,76],hp:[90,32],arms:[[[42,88],[48,104]]],legs:[[[118,44],[132,56]]],props:[{t:'box',x:120,y:56,w:28,h:50},{t:'floor',y:106}]},
-  lsit_knee:   {h:[70,34],s:[70,46],hp:[72,78],arms:[[[70,66],[70,86]]],legs:[[[92,66],[96,80]]],props:[{t:'brick',x:60,y:86},{t:'floor',y:106}]},
-  lsit_full:   {h:[70,34],s:[70,46],hp:[72,78],arms:[[[70,66],[70,86]]],legs:[[[100,76],[128,76]]],props:[{t:'brick',x:60,y:86},{t:'floor',y:106}]},
-  pplanche:    {h:[44,70],s:[56,72],hp:[100,70],arms:[[[62,88],[70,104]]],legs:[[[124,74],[144,100]]],props:[{t:'floor',y:106},{t:'arrow',x:40,y1:60,y2:60,h:true}]},
-  row:         {h:[50,42],s:[62,46],hp:[94,54],arms:[[[68,66],[66,84]]],legs:[[[100,80],[104,106]]],props:[{t:'floor',y:106},{t:'kb',x:66,y:92}]},
-  rope:        {h:[80,30],s:[80,42],hp:[82,72],arms:[[[70,28],[80,10]],[[92,52],[80,40]]],legs:[[[70,90],[82,96]]],props:[{t:'rope',x:80}]},
+  pull_bottom:{h:[100,46],n:[100,60],hp:[100,96],arms:[[[90,38],[86,16]],[[110,38],[114,16]]],legs:[[[100,120],[102,134]],[[98,120],[96,134]]],props:[{t:'bar',y:16}],note:{text:'руки прямые, лопатки вниз',x:150,y:56,ax:112,ay:44}},
+  pull_top:{h:[100,28],n:[100,42],hp:[100,78],arms:[[[80,28],[86,16]],[[120,28],[114,16]]],legs:[[[104,104],[100,128]],[[96,104],[94,128]]],props:[{t:'bar',y:16}],note:{text:'подбородок над перекладиной, пауза 1 с',x:150,y:70,ax:108,ay:26}},
+  ctb_top:{h:[100,18],n:[100,32],hp:[104,68],arms:[[[76,34],[86,16]],[[124,34],[114,16]]],legs:[[[112,94],[104,118]],[[106,94],[98,118]]],props:[{t:'bar',y:16},{t:'arrowv',x:150,y1:90,y2:40}],note:{text:'перекладина у груди, тянуть рывком',x:150,y:112,ax:108,ay:30}},
+  wpull:{h:[100,44],n:[100,58],hp:[100,94],arms:[[[90,36],[86,16]],[[110,36],[114,16]]],legs:[[[100,118],[100,130]],[[100,118],[100,130]]],props:[{t:'bar',y:16},{t:'kb',x:100,y:136,s:1}],note:{text:'гиря зажата стопами',x:150,y:120,ax:108,ay:134}},
+  dip_top:{h:[100,30],n:[100,44],hp:[100,82],arms:[[[90,66],[80,66]],[[110,66],[120,66]]],legs:[[[96,104],[90,124]],[[98,104],[92,124]]],props:[{t:'pbar',x:80,y:66},{t:'pbar',x:120,y:66}],note:{text:'вверху руки прямые, плечи вниз',x:150,y:28,ax:112,ay:48}},
+  dip_bottom:{h:[100,52],n:[100,66],hp:[104,100],arms:[[[78,54],[80,66]],[[122,54],[120,66]]],legs:[[[96,122],[88,136]],[[98,122],[90,136]]],props:[{t:'pbar',x:80,y:66},{t:'pbar',x:120,y:66}],note:{text:'плечи ниже локтей, корпус чуть вперёд',x:150,y:112,ax:104,ay:64}},
+  fl_tuck:{h:[72,66],n:[88,62],hp:[124,60],arms:[[[90,38],[94,16]],[[96,38],[100,16]]],legs:[[[122,82],[104,82]],[[124,84],[106,84]]],props:[{t:'bar',y:16}],note:{text:'таз на уровне плеч, спина параллельна земле',x:150,y:112,ax:118,ay:66}},
+  fl_half:{h:[60,66],n:[78,62],hp:[118,60],arms:[[[88,38],[94,16]],[[94,38],[100,16]]],legs:[[[140,78],[136,100]],[[142,80],[138,102]]],props:[{t:'bar',y:16}],note:{text:'колени разогнуты до 90°',x:150,y:120,ax:142,ay:82}},
+  t2b_knees:{h:[100,40],n:[100,54],hp:[100,90],arms:[[[90,34],[86,16]],[[110,34],[114,16]]],legs:[[[76,68],[80,90]],[[78,70],[82,92]]],props:[{t:'bar',y:16}],note:{text:'колени к груди, таз подкручен',x:150,y:60,ax:80,ay:70}},
+  t2b_full:{h:[102,40],n:[100,54],hp:[98,90],arms:[[[90,34],[86,16]],[[110,34],[114,16]]],legs:[[[72,60],[64,24]],[[74,62],[66,26]]],props:[{t:'bar',y:16}],note:{text:'ноги прямые, носки к перекладине',x:150,y:60,ax:68,ay:30}},
+  hs_wall:{h:[88,122],n:[88,108],hp:[92,68],arms:[[[86,124],[84,136]],[[90,124],[88,136]]],legs:[[[94,38],[96,8]],[[92,38],[94,8]]],props:[{t:'wall',x:102},{t:'floor',y:136}],note:{text:'грудью к стене, тело в линию, взгляд в пол',x:40,y:40,ax:90,ay:70}},
+  pistol_box:{h:[84,38],n:[86,52],hp:[94,90],arms:[[[62,62],[40,70]],[[66,64],[44,72]]],legs:[[[78,112],[80,136]],[[54,76],[26,84]]],props:[{t:'box',x:90,y:90,w:36,h:46},{t:'floor',y:136}],note:{text:'садишься на стул, пятка на полу',x:150,y:60,ax:104,ay:92}},
+  pistol_free:{h:[80,42],n:[82,56],hp:[94,100],arms:[[[60,66],[38,74]],[[64,68],[42,76]]],legs:[[[74,122],[80,136]],[[50,88],[24,94]]],props:[{t:'floor',y:136}],note:{text:'без опоры, колено за носком',x:150,y:60,ax:78,ay:124}},
+  rdl:{h:[58,56],n:[72,58],hp:[110,66],arms:[[[78,84],[80,110]],[[82,86],[84,112]]],legs:[[[112,100],[114,136]],[[140,58],[172,52]]],props:[{t:'floor',y:136},{t:'kb',x:82,y:122,s:1}],note:{text:'спина прямая, гиря вдоль голени, задняя нога тянется назад',x:150,y:112,ax:140,ay:60}},
+  pike:{h:[70,100],n:[78,86],hp:[112,38],arms:[[[66,112],[60,134]],[[70,114],[64,136]]],legs:[[[148,52],[166,70]],[[150,54],[168,72]]],props:[{t:'box',x:150,y:70,w:36,h:66},{t:'floor',y:136}],note:{text:'ноги на стуле, таз высоко',x:40,y:40,ax:110,ay:40}},
+  pike_bottom:{h:[64,124],n:[76,102],hp:[112,42],arms:[[[54,114],[62,134]],[[58,116],[66,136]]],legs:[[[148,54],[166,70]],[[150,56],[168,72]]],props:[{t:'box',x:150,y:70,w:36,h:66},{t:'floor',y:136}],note:{text:'голова к полу между ладонями',x:40,y:40,ax:66,ay:118}},
+  lsit_knee:{h:[88,44],n:[88,58],hp:[90,98],arms:[[[88,84],[88,108]],[[90,84],[90,108]]],legs:[[[114,84],[120,102]],[[116,86],[122,104]]],props:[{t:'brick',x:76,y:108},{t:'floor',y:136}],note:{text:'руки прямые, плечи вниз, колени поджаты',x:150,y:50,ax:100,ay:86}},
+  lsit_full:{h:[88,44],n:[88,58],hp:[90,98],arms:[[[88,84],[88,108]],[[90,84],[90,108]]],legs:[[[124,96],[160,96]],[[124,98],[160,98]]],props:[{t:'brick',x:76,y:108},{t:'floor',y:136}],note:{text:'ноги прямые, носки на себя',x:150,y:50,ax:150,ay:92}},
+  pplanche:{h:[52,86],n:[70,90],hp:[126,88],arms:[[[80,112],[88,136]],[[84,114],[92,136]]],legs:[[[156,94],[182,128]],[[158,96],[184,130]]],props:[{t:'floor',y:136},{t:'arrowh',x:46,y:112,len:22}],note:{text:'плечи впереди кистей, пальцы в стороны',x:120,y:40,ax:76,ay:98}},
+  row:{h:[62,52],n:[76,56],hp:[116,68],arms:[[[84,82],[82,106]],[[88,80],[86,88]]],legs:[[[122,102],[128,136]],[[120,104],[126,136]]],props:[{t:'floor',y:136},{t:'kb',x:82,y:118,s:1}],note:{text:'спина прямая, локоть вдоль тела, вниз 3 с',x:150,y:112,ax:86,ay:86}},
+  rope:{h:[100,34],n:[100,48],hp:[102,88],arms:[[[90,30],[100,10]],[[112,62],[100,50]]],legs:[[[88,108],[100,118]],[[112,108],[100,116]]],props:[{t:'rope',x:100}],note:{text:'стопами зажимаешь канат',x:150,y:112,ax:104,ay:116}},
 };
-
   // Stage index per week: 0 = w1-3, 1 = w4-6, 2 = deload w7, 3 = w8-9, 4 = w10-12
   const stageOf = w => w <= 3 ? 0 : w <= 6 ? 1 : w === 7 ? 2 : w <= 9 ? 3 : 4;
   const STAGE_NAME = ['Втягивание, нед 1–3', 'Прогресс, нед 4–6', 'Разгрузка, нед 7', 'Прогресс 2, нед 8–9', 'Финал, нед 10–12'];
@@ -372,26 +385,36 @@ const POSES = {
   const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h'], 2:[], 3:[], 4:[], 5:[], 6:['sat'], 0:[]};
   const OTHER_DAYS = {2:'Танцы', 3:'Борьба', 4:'Танцы', 5:'Борьба + канат', 0:'Отдых. 15–20 минут растяжки по желанию.'};
 
-  // ---------- stick figures ----------
+  // ---------- figures ----------
+  function wrapText(t, max){ const w = t.split(' '), lines=[]; let cur=''; w.forEach(x => { if ((cur+' '+x).trim().length > max){ lines.push(cur.trim()); cur = x; } else cur += ' ' + x; }); if (cur.trim()) lines.push(cur.trim()); return lines; }
   function figSvg(name){
     const p = POSES[name]; if (!p) return '';
     let s = '';
     (p.props||[]).forEach(q => {
-      if (q.t==='bar') s += `<line class="pr" x1="${q.x1}" y1="${q.y1}" x2="${q.x2}" y2="${q.y2}"/>`;
-      else if (q.t==='pbar') s += `<line class="pr" x1="${q.x-14}" y1="${q.y}" x2="${q.x+14}" y2="${q.y}"/><line class="pr" x1="${q.x}" y1="${q.y}" x2="${q.x}" y2="108"/>`;
-      else if (q.t==='floor') s += `<line class="pr" x1="8" y1="${q.y}" x2="152" y2="${q.y}"/>`;
-      else if (q.t==='wall') s += `<line class="pr" x1="${q.x}" y1="4" x2="${q.x}" y2="106"/><line class="pr" x1="8" y1="106" x2="152" y2="106"/>`;
-      else if (q.t==='box') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="2"/>`;
-      else if (q.t==='brick') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="22" height="20" rx="2"/><rect class="pf" x="${q.x+8}" y="${q.y+6}" width="22" height="14" rx="2" opacity=".5"/>`;
-      else if (q.t==='kb') s += `<circle class="pf" cx="${q.x}" cy="${q.y}" r="7"/><path class="pr" d="M${q.x-5} ${q.y-5} a5 5 0 0 1 10 0"/>`;
-      else if (q.t==='rope') s += `<line class="pr" x1="${q.x}" y1="0" x2="${q.x}" y2="110" stroke-dasharray="3 3"/>`;
-      else if (q.t==='arrow') s += q.h ? `<path class="ar" d="M${q.x+16} ${q.y1} L${q.x} ${q.y1} M${q.x+6} ${q.y1-5} L${q.x} ${q.y1} L${q.x+6} ${q.y1+5}"/>` : `<path class="ar" d="M${q.x} ${q.y1} L${q.x} ${q.y2} M${q.x-5} ${q.y2+6} L${q.x} ${q.y2} L${q.x+5} ${q.y2+6}"/>`;
+      if (q.t==='bar') s += `<rect class="pr" x="40" y="${q.y-3}" width="120" height="6" rx="3"/>`;
+      else if (q.t==='pbar') s += `<line class="pl" x1="${q.x}" y1="${q.y}" x2="${q.x}" y2="136"/><rect class="pr" x="${q.x-18}" y="${q.y-3}" width="36" height="6" rx="3"/>`;
+      else if (q.t==='floor') s += `<line class="pl" x1="10" y1="${q.y}" x2="190" y2="${q.y}"/>`;
+      else if (q.t==='wall') s += `<rect class="pw" x="${q.x}" y="4" width="10" height="132"/><line class="pl" x1="10" y1="136" x2="190" y2="136"/>`;
+      else if (q.t==='box') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" rx="3"/>`;
+      else if (q.t==='brick') s += `<rect class="pf" x="${q.x}" y="${q.y}" width="26" height="28" rx="3"/><rect class="pf" x="${q.x+26}" y="${q.y}" width="26" height="28" rx="3"/>`;
+      else if (q.t==='kb') s += `<path class="pkh" d="M${q.x-6} ${q.y-8} a6 6 0 0 1 12 0"/><circle class="pk" cx="${q.x}" cy="${q.y}" r="8"/>`;
+      else if (q.t==='rope') s += `<line class="pl" x1="${q.x}" y1="0" x2="${q.x}" y2="140" stroke-dasharray="4 3"/>`;
+      else if (q.t==='arrowv') s += `<path class="ar" d="M${q.x} ${q.y1} L${q.x} ${q.y2} M${q.x-6} ${q.y2+8} L${q.x} ${q.y2} L${q.x+6} ${q.y2+8}"/>`;
+      else if (q.t==='arrowh') s += `<path class="ar" d="M${q.x+q.len} ${q.y} L${q.x} ${q.y} M${q.x+7} ${q.y-6} L${q.x} ${q.y} L${q.x+7} ${q.y+6}"/>`;
     });
-    (p.legs||[]).forEach(l => { s += `<polyline class="st" points="${p.hp} ${l[0]} ${l[1]}"/>`; });
-    s += `<line class="st" x1="${p.s[0]}" y1="${p.s[1]}" x2="${p.hp[0]}" y2="${p.hp[1]}"/>`;
-    (p.arms||[]).forEach(a => { s += `<polyline class="st" points="${p.s} ${a[0]} ${a[1]}"/>`; });
-    s += `<circle class="hd" cx="${p.h[0]}" cy="${p.h[1]}" r="7"/>`;
-    return `<svg viewBox="0 0 160 110" aria-hidden="true">${s}</svg>`;
+    const limb = (a, b, c, cls) => `<polyline class="${cls}" points="${a} ${b} ${c}"/>`;
+    const legs = p.legs||[], arms = p.arms||[];
+    if (legs[1]) s += limb(p.hp, legs[1][0], legs[1][1], 'lf');
+    if (arms[1]) s += limb(p.n, arms[1][0], arms[1][1], 'lf');
+    const dx = p.hp[0]-p.n[0], dy = p.hp[1]-p.n[1], L = Math.hypot(dx,dy)||1, nx = -dy/L*7, ny = dx/L*7;
+    s += `<path class="tor" d="M${p.n[0]+nx} ${p.n[1]+ny} L${p.hp[0]+nx*.8} ${p.hp[1]+ny*.8} L${p.hp[0]-nx*.8} ${p.hp[1]-ny*.8} L${p.n[0]-nx} ${p.n[1]-ny} Z"/>`;
+    if (legs[0]) s += limb(p.hp, legs[0][0], legs[0][1], 'ln');
+    if (arms[0]) s += limb(p.n, arms[0][0], arms[0][1], 'ln');
+    s += `<line class="ln" x1="${p.n[0]}" y1="${p.n[1]}" x2="${p.h[0]}" y2="${p.h[1]}"/><circle class="hd" cx="${p.h[0]}" cy="${p.h[1]}" r="9"/>`;
+    if (p.note){
+      s += `<circle class="nr" cx="${p.note.ax}" cy="${p.note.ay}" r="8"/><circle class="nd" cx="${p.note.ax}" cy="${p.note.ay}" r="3.5"/>`;
+    }
+    return `<figure class="pose"><svg viewBox="0 0 200 140" aria-hidden="true">${s}</svg>` + (p.note ? `<figcaption><i></i>${p.note.text}</figcaption>` : '') + `</figure>`;
   }
   function exCard(k, week, compact){
     const e = EX[k], st = stageOf(week);
