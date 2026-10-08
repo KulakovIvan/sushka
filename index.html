@@ -297,7 +297,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate()+n);
 
   const WEEKS = [
-    {ph:'Втягивание', note:'Стартовые замеры на этой неделе. Канат — только когда заживёт ладонь.'},
+    {ph:'Слив воды', note:'После читмилов вернуться на 74,0 к воскресенью. Без читмилов, калории не трогай. Стартовые замеры.'},
     {ph:'Втягивание', note:'Подбери варианты упражнений, где остаётся запас 1–2 повтора.'},
     {ph:'Втягивание', note:'Первые прибавки: повтор сверху или вариант сложнее.'},
     {ph:'Чек-поинт 1', cp:true, note:'Сб 31 окт: замеры на площадке до обратной пробежки, вес и талия.'},
@@ -444,7 +444,8 @@ const POSES = {
   const entries = () => Object.values(state.log).filter(e => e && typeof e.kg === 'number' && e.date).sort((a,b) => a.date < b.date ? -1 : 1);
   const weekOf = s => Math.floor(idx(s)/7) + 1;
   const weekAvg = w => { const xs = entries().filter(e => weekOf(e.date) === w).map(e => e.kg); return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null; };
-  const band = w => [START_KG - 0.35*w, START_KG - 0.2*w];
+  // week 1 = water drop back to START; the corridor starts from START at the end of week 1
+  const band = w => { const k = Math.max(0, w-1); return [START_KG - 0.35*k, START_KG - 0.2*k]; };
   const todayIso = iso(new Date());
   const curWeek = Math.min(12, Math.max(1, Math.floor((new Date() - START)/DAY/7) + 1));
 
@@ -472,8 +473,8 @@ const POSES = {
       $('st-delta').textContent = '—';
     }
     const [lo, hi] = band(curWeek);
-    $('st-band').textContent = kg(lo) + '–' + kg(hi);
-    $('st-band-s').textContent = 'к концу ' + curWeek + '-й недели';
+    $('st-band').textContent = curWeek === 1 ? '≈ ' + kg(START_KG) : kg(lo) + '–' + kg(hi);
+    $('st-band-s').textContent = curWeek === 1 ? 'вернуться к воскресенью' : 'к концу ' + curWeek + '-й недели';
     renderVerdict(); renderToday();
   }
   function renderVerdict(){
@@ -492,7 +493,7 @@ const POSES = {
       else msg = '<b>Вес вырос</b> на ' + kg(d) + ' кг за неделю. После читмила подожди 3–5 дней, иначе убери 150 ккал.';
     } else {
       const a = avg(cur);
-      msg = a <= hi ? '<b>Ниже коридора или в нём.</b> Калории не трогай, оцени в воскресенье.' : '<b>Выше коридора</b> на ' + kg(a-hi) + ' кг. После читмила это вода, подожди до воскресенья.';
+      msg = a <= hi ? '<b>Ниже коридора или в нём.</b> Калории не трогай, оцени в воскресенье.' : (curWeek === 1 ? '<b>Слив воды:</b> до ' + kg(START_KG) + ' осталось ' + kg(a-START_KG) + ' кг. Без читмилов, калории не трогай, смотри в воскресенье.' : '<b>Выше коридора</b> на ' + kg(a-hi) + ' кг. После читмила это вода, подожди до воскресенья.');
     }
     v.innerHTML = msg;
   }
@@ -530,7 +531,8 @@ const POSES = {
     s += `<text x="${L}" y="${T-8}">кг</text><text x="${W-R}" y="${T-8}" text-anchor="end">неделя</text>`;
     // band
     const [lo12, hi12] = band(12);
-    s += `<polygon points="${X(0)},${Y(START_KG)} ${X(84)},${Y(hi12)} ${X(84)},${Y(lo12)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`;
+    s += `<polygon points="${X(7)},${Y(START_KG)} ${X(84)},${Y(hi12)} ${X(84)},${Y(lo12)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`;
+    s += `<line x1="${X(0)}" x2="${X(7)}" y1="${Y(START_KG)}" y2="${Y(START_KG)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3"/>`;
     // review line
     s += `<line x1="${L}" x2="${W-R}" y1="${Y(GOAL_KG)}" y2="${Y(GOAL_KG)}" stroke="var(--mark)" stroke-width="1.5" stroke-dasharray="6 5"/>`;
     // checkpoints
@@ -598,7 +600,7 @@ const POSES = {
         ]),
         el('div', {class:'side'}, [
           el('span', {class:'num', text: avg == null ? '—' : kg(avg)}),
-          el('span', {text: 'цель ' + kg(lo) + '–' + kg(hi)}),
+          el('span', {text: n === 1 ? 'цель ≈ ' + kg(START_KG) : 'цель ' + kg(lo) + '–' + kg(hi)}),
           el('span', {text: count + '/7 трен.'})
         ])
       ]));
