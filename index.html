@@ -97,6 +97,48 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .snote{font-size:12.5px;color:var(--muted)}
 .how-sum{display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--muted);max-width:62ch}
 .how-sum b{color:var(--ink)}
+
+/* timer */
+.tm-open{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:10px;background:var(--accent);color:var(--bg);font:600 15px var(--f-body);padding:12px 14px;cursor:pointer;text-align:left}
+.tm-open small{margin-left:auto;font:500 12px var(--f-mono);opacity:.85;text-align:right}
+.tm-ico{font-size:13px}
+.tm{position:fixed;inset:0;z-index:50;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));gap:12px;overflow-y:auto}
+.tm[hidden]{display:none}
+.tm-top{display:flex;align-items:flex-start;gap:12px}
+.tm-head{flex:1;min-width:0}
+.tm-head h2{font-size:22px}
+.tm-head p{font-size:15px;opacity:.85;margin-top:4px;font-weight:500}
+.tm-x{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:rgba(127,127,127,.18);color:inherit;font-size:28px;line-height:1;cursor:pointer}
+.tm-body{flex:1;display:flex;flex-direction:column;gap:14px;min-height:0}
+.setup-rows{display:flex;flex-direction:column;border-top:2px solid var(--ink)}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) 52px 96px 52px;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.sl{font-size:15px;font-weight:500}
+.sv{font:600 20px var(--f-mono);text-align:center}
+.sb{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:24px;cursor:pointer}
+.chips-t{display:flex;flex-wrap:wrap;gap:8px}
+.chip-t{font:500 14px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:9px 14px;cursor:pointer}
+.chip-t[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.tm-hint{font-size:13.5px;color:var(--muted)}
+.tm-start{margin-top:auto;border:0;border-radius:16px;background:var(--accent);color:var(--bg);font:700 26px var(--f-display);padding:22px;cursor:pointer}
+.tm.run{color:var(--bg)}
+.tm.run .tm-x{background:rgba(255,255,255,.2)}
+.tm.ph-prep{background:var(--ink)}
+.tm.ph-work,.tm.ph-reps{background:var(--accent)}
+.tm.ph-rest,.tm.ph-switch{background:var(--mark)}
+.tm.ph-done{background:var(--ink)}
+.tm.paused{filter:saturate(.35)}
+.tm-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:0;background:transparent;color:inherit;cursor:pointer;min-height:300px;width:100%;padding:0}
+.tm-ph{font:700 clamp(22px,7vw,40px) var(--f-display);text-transform:uppercase;letter-spacing:.04em}
+.tm-big{font:700 clamp(120px,40vw,320px)/1 var(--f-display);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.tm-big.done{font-size:clamp(100px,30vw,220px)}
+.tm-unit{font:600 clamp(20px,6vw,32px) var(--f-body)}
+.tm-bar{width:min(80%,520px);height:10px;border-radius:5px;background:rgba(255,255,255,.25);overflow:hidden;margin-top:8px}
+.tm-bar i{display:block;height:100%;background:currentColor;transition:width .2s linear}
+.tm-tap{font-size:14px;opacity:.75;margin-top:10px}
+.tm-next{text-align:center;font-size:17px;font-weight:600;opacity:.9}
+.tm-ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px}
+.tm-ctrl button{height:56px;border-radius:14px;border:2px solid currentColor;background:transparent;color:inherit;font:600 16px var(--f-body);cursor:pointer}
+@media (prefers-reduced-motion:reduce){.tm-bar i{transition:none}}
 /* tabs */
 html{padding-bottom:0}
 body{padding-block:20px 96px}
@@ -366,6 +408,11 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   </section>
 </div>
 
+<div class="tm" id="tm" hidden role="dialog" aria-modal="true" aria-labelledby="tm-title">
+  <div class="tm-top"><div class="tm-head"><h2 id="tm-title"></h2><p id="tm-sub"></p></div><button type="button" class="tm-x" id="tm-close" aria-label="Закрыть таймер">×</button></div>
+  <div class="tm-body" id="tm-body"></div>
+</div>
+
 <nav class="tabs" role="tablist" aria-label="Разделы">
   <button class="tab" role="tab" data-page="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 5-7 4 5"/><path d="M3 21h18"/></svg>Сегодня</button>
   <button class="tab" role="tab" data-page="weeks" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Недели</button>
@@ -527,6 +574,13 @@ const POSES = {
       + `<p class="how">${e.how}</p>`
       + (compact ? '' : `<ul class="cues">${e.cues.map(c=>'<li>'+c+'</li>').join('')}</ul>`)
       + `<div class="stage${st===2?' dl':''}">${STAGE_NAME[st]}${st===2?' — подходов вдвое меньше':''}</div>`;
+    const tp = timerPlan(k, week);
+    if (tp){
+      const b = el('button', {type:'button', class:'tm-open'});
+      b.append(el('span', {class:'tm-ico', text:'▶'}), el('span', {text: tp.timed ? 'Таймер' : 'Подходы и отдых'}), el('small', {text: tp.sets + '×' + (tp.timed ? durTxt(tp.secs) : tp.reps) + (tp.side ? ' на сторону' : '') + ' · отдых ' + durTxt(tp.rest)}));
+      b.addEventListener('click', () => openTimer(k));
+      card.append(b);
+    }
     return card;
   }
 
@@ -1062,6 +1116,193 @@ const POSES = {
     note('Записано: ' + fmtD(parse(date)) + ', ' + kg(k) + ' кг.');
     $('in-kg').value = ''; $('in-waist').value = '';
   });
+
+  // ---------- workout timer ----------
+  // Holds and stretches run on their own; rep sets wait for one tap anywhere, then rest counts down.
+  const TIMED = new Set(['hs','fl','lsit','lsitb','couch','halfsplit','lunge','split','standsplit','pinch']);
+  const SIDE = {pistol:'leg', rdl:'leg', couch:'leg', halfsplit:'leg', lunge:'leg', split:'leg', standsplit:'leg', row:'arm', pinch:'arm'};
+  const REST = {ctb:150, wpull:150, dips:150, pullp:150, dipss:150, pistol:120, rdl:90, pike:90, pplan:90, t2b:90, row:75, bandext:45,
+    hs:60, fl:90, lsit:60, lsitb:60, pinch:60, towel:90, ftip:60, couch:15, halfsplit:15, lunge:15, split:20, standsplit:15};
+  const STRETCH = new Set(['couch','halfsplit','lunge','split','standsplit']);
+  function timerPlan(k, week){
+    const e = EX[k]; if (!e) return null;
+    const txt = e.t[stageOf(week)];
+    const m = txt.match(/(\d+)\s*×\s*(\d+)\s*(мин|с)?/); if (!m) return null;
+    const timed = TIMED.has(k) || (k === 'towel' && /вис/.test(txt)) || (k === 'ftip' && /удержание/.test(txt));
+    const n = +m[2];
+    return {k, name:e.n, sets:+m[1], timed, secs: timed ? (m[3] === 'мин' ? n*60 : n) : null, reps: timed ? null : n,
+      side: SIDE[k] || null, rest: REST[k] || 90, sw: STRETCH.has(k) ? 10 : 15, prep: 5, txt};
+  }
+  const SIDE_NAME = {leg:['Правая нога','Левая нога'], arm:['Правая рука','Левая рука']};
+  function buildSteps(c){
+    const st = [{type:'prep', dur:c.prep}];
+    for (let s = 1; s <= c.sets; s++){
+      const sides = c.side ? SIDE_NAME[c.side] : [null];
+      sides.forEach((sd, j) => {
+        st.push(c.timed ? {type:'work', dur:c.secs, set:s, side:sd} : {type:'reps', reps:c.reps, set:s, side:sd});
+        if (j < sides.length - 1) st.push({type:'switch', dur:c.sw, set:s, side:sides[j+1]});
+      });
+      if (s < c.sets) st.push({type:'rest', dur:c.rest, set:s+1});
+    }
+    st.push({type:'done'});
+    return st;
+  }
+
+  const TM = {cfg:null, steps:[], i:0, endAt:0, left:0, paused:false, timer:0, voice:true, ac:null, lock:null, lastSec:null};
+  try { TM.voice = localStorage.getItem(KEY+'-voice') !== '0'; } catch(e){}
+  function beep(freq, ms, vol){
+    try {
+      if (!TM.ac) return;
+      const o = TM.ac.createOscillator(), g = TM.ac.createGain();
+      o.frequency.value = freq; o.type = 'sine';
+      g.gain.setValueAtTime(vol || 0.35, TM.ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, TM.ac.currentTime + ms/1000);
+      o.connect(g); g.connect(TM.ac.destination); o.start(); o.stop(TM.ac.currentTime + ms/1000);
+    } catch(e){}
+  }
+  function say(t){
+    if (!TM.voice || !('speechSynthesis' in window)) return;
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ru-RU'; u.rate = 1.05; speechSynthesis.speak(u); } catch(e){}
+  }
+  async function wake(on){
+    try {
+      if (on && 'wakeLock' in navigator && !TM.lock){ TM.lock = await navigator.wakeLock.request('screen'); TM.lock.addEventListener('release', () => { TM.lock = null; }); }
+      if (!on && TM.lock){ await TM.lock.release(); TM.lock = null; }
+    } catch(e){ TM.lock = null; }
+  }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && TM.cfg && TM.steps.length && $('tm').classList.contains('run')) wake(true); });
+
+  const fmtT = s => s >= 60 ? Math.floor(s/60) + ':' + pad(s%60) : String(s);
+  const durTxt = s => s < 60 ? s + ' с' : s % 60 ? Math.floor(s/60) + ':' + pad(s%60) + ' мин' : (s/60) + ' мин';
+  const plural = (n, a, b, c) => { const m10 = n%10, m100 = n%100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
+
+  function openTimer(k){
+    const c = timerPlan(k, curWeek); if (!c) return;
+    TM.cfg = c;
+    const ov = $('tm'); ov.hidden = false; ov.className = 'tm setup';
+    document.body.style.overflow = 'hidden';
+    renderSetup();
+  }
+  function closeTimer(){
+    clearInterval(TM.timer); TM.timer = 0; TM.steps = [];
+    try { speechSynthesis.cancel(); } catch(e){}
+    wake(false);
+    $('tm').hidden = true; document.body.style.overflow = '';
+  }
+  function stepper(label, val, unit, step, min, max, set){
+    const v = el('span', {class:'sv', text: val + (unit ? ' ' + unit : '')});
+    const mk = (d, t) => { const b = el('button', {type:'button', class:'sb', 'aria-label': label + (d > 0 ? ' больше' : ' меньше'), text:t}); b.addEventListener('click', () => { set(Math.min(max, Math.max(min, val + d*step))); renderSetup(); }); return b; };
+    return el('div', {class:'srow'}, [el('span', {class:'sl', text:label}), mk(-1, '−'), v, mk(1, '+')]);
+  }
+  function renderSetup(){
+    const c = TM.cfg, box = $('tm-body'); box.textContent = '';
+    $('tm-title').textContent = c.name;
+    $('tm-sub').textContent = 'План недели: ' + c.txt;
+    const rows = el('div', {class:'setup-rows'}, [
+      stepper('Подходы', c.sets, '', 1, 1, 10, v => c.sets = v),
+      c.timed ? stepper('Работа', c.secs, 'с', c.secs >= 60 ? 15 : 5, 5, 300, v => c.secs = v) : stepper('Повторы', c.reps, '', 1, 1, 50, v => c.reps = v),
+      stepper('Отдых', c.rest, 'с', c.rest >= 60 ? 15 : 5, 5, 300, v => c.rest = v),
+      c.side ? stepper('Смена стороны', c.sw, 'с', 5, 5, 60, v => c.sw = v) : null,
+      stepper('Приготовиться', c.prep, 'с', 5, 0, 30, v => c.prep = v),
+    ].filter(Boolean));
+    const sideBtn = el('button', {type:'button', class:'chip-t', 'aria-pressed': c.side ? 'true' : 'false', text: c.side ? 'На каждую сторону' : 'Без смены сторон'});
+    sideBtn.addEventListener('click', () => { c.side = c.side ? null : (SIDE[c.k] || 'leg'); renderSetup(); });
+    const voiceBtn = el('button', {type:'button', class:'chip-t', 'aria-pressed': TM.voice ? 'true' : 'false', text: TM.voice ? 'Голос включён' : 'Голос выключен'});
+    voiceBtn.addEventListener('click', () => { TM.voice = !TM.voice; try { localStorage.setItem(KEY+'-voice', TM.voice ? '1' : '0'); } catch(e){} renderSetup(); });
+    const total = buildSteps(c).reduce((a, s) => a + (s.dur || (s.type === 'reps' ? 40 : 0)), 0);
+    const start = el('button', {type:'button', class:'tm-start', text:'Старт'});
+    start.addEventListener('click', startRun);
+    box.append(rows, el('div', {class:'chips-t'}, [sideBtn, voiceBtn]),
+      el('p', {class:'tm-hint', text: (c.timed ? 'Всё идёт само: положи телефон экраном к себе.' : 'Сделал подход — коснись экрана где угодно, дальше пойдёт отдых.') + ' Около ' + Math.max(1, Math.round(total/60)) + ' мин. Звук: проверь, что телефон не на беззвучном.'}),
+      start);
+  }
+  function startRun(){
+    try { TM.ac = TM.ac || new (window.AudioContext || window.webkitAudioContext)(); TM.ac.resume(); } catch(e){}
+    TM.steps = buildSteps(TM.cfg); TM.i = -1; TM.paused = false;
+    wake(true);
+    $('tm').className = 'tm run';
+    say('Приготовься. ' + TM.cfg.name);
+    next();
+    clearInterval(TM.timer); TM.timer = setInterval(tick, 200);
+  }
+  function stepLabel(s){
+    const c = TM.cfg;
+    if (s.type === 'prep') return 'Приготовься';
+    if (s.type === 'work') return 'Работа';
+    if (s.type === 'reps') return 'Подход';
+    if (s.type === 'rest') return 'Отдых';
+    if (s.type === 'switch') return 'Смена стороны';
+    return 'Готово';
+  }
+  function next(){
+    TM.i++;
+    const s = TM.steps[TM.i], c = TM.cfg;
+    if (!s) return;
+    TM.lastSec = null;
+    if (s.dur != null){ TM.left = s.dur; TM.endAt = Date.now() + s.dur*1000; }
+    const last = s.set === c.sets;
+    if (s.type === 'work'){ beep(880, 450); say((last ? 'Последний подход. ' : 'Подход ' + s.set + '. ') + (s.side || 'Работа')); }
+    else if (s.type === 'reps'){ beep(880, 450); say((last ? 'Последний подход. ' : 'Подход ' + s.set + '. ') + (s.side ? s.side + '. ' : '') + s.reps + ' ' + plural(s.reps, 'повтор', 'повтора', 'повторов')); }
+    else if (s.type === 'rest'){ beep(440, 450); say('Отдых ' + s.dur + ' ' + plural(s.dur, 'секунда', 'секунды', 'секунд')); }
+    else if (s.type === 'switch'){ beep(660, 300); say('Смена. ' + s.side); }
+    else if (s.type === 'done'){ beep(880, 200); setTimeout(() => beep(1175, 500), 220); say('Готово. Упражнение закончено.'); clearInterval(TM.timer); TM.timer = 0; wake(false); }
+    if (s.dur === 0) return next();
+    render();
+  }
+  function tick(){
+    const s = TM.steps[TM.i]; if (!s || TM.paused || s.dur == null) return;
+    const left = Math.max(0, Math.ceil((TM.endAt - Date.now())/1000));
+    if (left !== TM.left){
+      TM.left = left;
+      if (left <= 3 && left > 0 && left !== TM.lastSec){ TM.lastSec = left; beep(660, 120, 0.25); }
+      if (s.type === 'work' && s.dur >= 30 && left === 10) say('Десять секунд');
+      if (s.type === 'rest' && s.dur >= 45 && left === 10) say('Через десять секунд работа');
+      render();
+    }
+    if (left === 0) next();
+  }
+  function tapMain(){
+    const s = TM.steps[TM.i]; if (!s) return;
+    if (s.type === 'reps') return next();
+    if (s.type === 'done') return closeTimer();
+    if (s.dur == null) return;
+    if (TM.paused){ TM.paused = false; TM.endAt = Date.now() + TM.left*1000; say('Продолжаем'); }
+    else { TM.paused = true; TM.left = Math.max(0, Math.ceil((TM.endAt - Date.now())/1000)); try { speechSynthesis.cancel(); } catch(e){} }
+    render();
+  }
+  function addTime(d){ const s = TM.steps[TM.i]; if (!s || s.dur == null) return; TM.left = Math.max(1, TM.left + d); TM.endAt = Date.now() + TM.left*1000; render(); }
+  function render(){
+    const s = TM.steps[TM.i], c = TM.cfg; if (!s) return;
+    const ov = $('tm');
+    ov.className = 'tm run ph-' + s.type + (TM.paused ? ' paused' : '');
+    $('tm-title').textContent = c.name;
+    $('tm-sub').textContent = s.type === 'done' ? c.sets + ' ' + plural(c.sets, 'подход', 'подхода', 'подходов') + ' сделано' : s.set ? 'Подход ' + s.set + ' из ' + c.sets + (s.side ? ' · ' + s.side : '') : '';
+    const box = $('tm-body'); box.textContent = '';
+    const main = el('button', {type:'button', class:'tm-main', 'aria-label': s.type === 'reps' ? 'Подход сделан' : s.type === 'done' ? 'Закрыть' : TM.paused ? 'Продолжить' : 'Пауза'});
+    main.append(el('span', {class:'tm-ph', text: TM.paused ? 'Пауза' : stepLabel(s)}));
+    if (s.type === 'reps'){
+      main.append(el('span', {class:'tm-big', text:String(s.reps)}), el('span', {class:'tm-unit', text: plural(s.reps, 'повтор', 'повтора', 'повторов')}), el('span', {class:'tm-tap', text:'Коснись экрана, когда закончишь'}));
+    } else if (s.type === 'done'){
+      main.append(el('span', {class:'tm-big done', text:'✓'}), el('span', {class:'tm-tap', text:'Коснись, чтобы закрыть'}));
+    } else {
+      main.append(el('span', {class:'tm-big', text:fmtT(TM.left)}));
+      const pct = s.dur ? 100 * (1 - TM.left/s.dur) : 0;
+      main.append(el('span', {class:'tm-bar'}, el('i', {style:'width:' + pct.toFixed(1) + '%'})));
+      main.append(el('span', {class:'tm-tap', text: TM.paused ? 'Коснись, чтобы продолжить' : 'Коснись — пауза'}));
+    }
+    main.addEventListener('click', tapMain);
+    box.append(main);
+    const nx = TM.steps.slice(TM.i + 1).find(x => x.type !== 'done');
+    if (nx && s.type !== 'done') box.append(el('p', {class:'tm-next', text:'Дальше: ' + (nx.type === 'rest' ? 'отдых ' + durTxt(nx.dur) : nx.type === 'switch' ? 'смена, ' + nx.side.toLowerCase() : nx.type === 'work' ? 'работа ' + durTxt(nx.dur) + (nx.side ? ', ' + nx.side.toLowerCase() : '') : nx.type === 'reps' ? nx.reps + ' ' + plural(nx.reps, 'повтор', 'повтора', 'повторов') + (nx.side ? ', ' + nx.side.toLowerCase() : '') : '')}));
+    if (s.type !== 'done'){
+      const ctr = el('div', {class:'tm-ctrl'});
+      if (s.dur != null){ const m = el('button', {type:'button', text:'−10 с'}); m.addEventListener('click', () => addTime(-10)); const p = el('button', {type:'button', text:'+10 с'}); p.addEventListener('click', () => addTime(10)); ctr.append(m, p); }
+      const sk = el('button', {type:'button', text:'Пропустить'}); sk.addEventListener('click', () => { TM.paused = false; next(); }); ctr.append(sk);
+      box.append(ctr);
+    }
+  }
+  $('tm-close').addEventListener('click', closeTimer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('tm').hidden) closeTimer(); });
 
   // ---------- training page ----------
   let dayKey = (new Date().getDay() === 6) ? 'sat' : 'mon_p';
