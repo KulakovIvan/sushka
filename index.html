@@ -40,6 +40,63 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .filebtn{position:relative;overflow:hidden}
 .filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .wrap{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+
+/* week grid */
+.wk2{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--line)}
+.wk2.now{background:linear-gradient(180deg,var(--accent-soft),transparent 140px);margin-inline:-10px;padding-inline:10px;border-radius:8px}
+.wk-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.wk-head .n{font-family:var(--f-display);font-weight:700;font-size:20px;margin-right:8px}
+.wk2.now .wk-head .n{color:var(--accent)}
+.wk-head .d{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.wk-side{display:flex;gap:8px;align-items:baseline;font-size:12px;color:var(--muted);white-space:nowrap}
+.wk-side .num{font-family:var(--f-mono);font-size:15px;font-weight:600;color:var(--ink)}
+.wk2 .ph{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.wk2 .txt{font-size:13px;color:var(--muted)}
+.dgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dcol{display:flex;flex-direction:column;gap:4px;min-width:0}
+.dh{font-size:11px;font-weight:600;color:var(--muted);text-align:center;padding:2px 0}
+.dcol.today .dh{color:var(--surface);background:var(--accent);border-radius:4px}
+.ses{font:500 11px var(--f-body);padding:7px 1px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ses[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.rest{font-size:10.5px;color:var(--muted);text-align:center;padding:7px 0;border:1px dashed var(--line);border-radius:6px}
+.kc{margin-top:auto;font:600 10px var(--f-mono);padding:5px 0;border-radius:6px;border:1px dashed var(--muted);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;overflow:hidden;min-width:0}
+.kc.ok{border-style:solid;border-color:var(--accent);color:var(--accent)}
+.kc.mid{border-style:solid;border-color:var(--mark);color:var(--mark)}
+.kc.bad{border-style:solid;border-color:var(--danger);background:var(--danger);color:var(--surface)}
+.kc.open{outline:2px solid var(--ink);outline-offset:1px}
+.wk-foot{font-size:12px;color:var(--muted)}
+.kced-box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.kced-title{font-size:12.5px;font-weight:600;color:var(--muted)}
+.kced{display:flex;flex-direction:column;gap:8px}
+.kcrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.kcrow input{width:90px}
+.kcrow .q{font:600 12px var(--f-mono);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 10px;cursor:pointer}
+.linkbtn{align-self:flex-start;background:none;border:0;color:var(--muted);font:500 12.5px var(--f-body);text-decoration:underline;cursor:pointer;padding:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.tses{display:flex;flex-wrap:wrap;gap:6px}
+.tses .ses{font-size:13px;padding:8px 14px;flex:0 1 auto}
+/* summaries */
+.sum-list{display:flex;flex-direction:column;gap:12px}
+.sum-list:empty{display:none}
+.sum{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.sum.live{border-style:dashed}
+.sum-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.score{font:700 22px var(--f-display);min-width:52px;text-align:center;padding:4px 8px;border-radius:8px;background:var(--bg)}
+.score.good{background:var(--accent-soft);color:var(--accent)}
+.score.mid{background:var(--mark-soft);color:var(--mark)}
+.score.bad{background:var(--danger);color:var(--surface)}
+.score.na{color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.brow{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12.5px}
+.bl{color:var(--muted)}
+.bt{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.bt i{display:block;height:100%}
+.bt i.g{background:var(--accent)} .bt i.m{background:var(--mark)} .bt i.b{background:var(--danger)}
+.bv{font-family:var(--f-mono);font-size:11.5px;white-space:nowrap}
+.rec{font-size:13.5px;font-weight:500}
+.snote{font-size:12.5px;color:var(--muted)}
+.how-sum{display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--muted);max-width:62ch}
+.how-sum b{color:var(--ink)}
 /* tabs */
 html{padding-bottom:0}
 body{padding-block:20px 96px}
@@ -209,6 +266,8 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
       <div><span class="eyebrow">Коридор сейчас</span><span class="v" id="st-band">—</span><span class="s" id="st-band-s">к концу недели</span></div>
     </div>
     <div class="alert" id="verdict"></div>
+    <div id="today-sum" class="sum-list"></div>
+    <section class="card" id="today-log" aria-label="Отметь сегодня"></section>
     <form class="entry" id="f-entry" autocomplete="off">
       <div class="field"><label for="in-date">Дата</label><input type="date" id="in-date" required min="2026-09-28" max="2027-01-10"></div>
       <div class="field"><label for="in-kg">Вес, кг</label><input type="number" id="in-kg" step="0.1" min="40" max="120" inputmode="decimal" placeholder="75.5" required></div>
@@ -233,8 +292,13 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   <!-- ===== Недели ===== -->
   <section class="page" id="p-weeks" role="tabpanel">
     <div class="head">
+      <h2>Сводки</h2>
+      <p class="lede">Оценка из трёх частей: тренировки, питание, вес. Как считается — на вкладке «Ещё».</p>
+    </div>
+    <div id="sums" class="sum-list"></div>
+    <div class="head">
       <h2>12 недель</h2>
-      <p class="lede">Отмечай сделанные тренировки. Справа средний вес недели. Раскрой «Что уметь», чтобы увидеть цели по упражнениям на эту неделю.</p>
+      <p class="lede">Нажимай на занятия, которые сделал. Внизу каждого дня — калории: норма, перебор или недобор.</p>
     </div>
     <div class="weeks" id="weeks"></div>
   </section>
@@ -274,12 +338,24 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
       <div><span class="if">средний вес ≈ цель</span><span class="then">Посмотри в зеркало и на талию. Если доволен — выходи на поддержку.</span></div>
     </div>
     <div class="head">
+      <h2>Как считается итог недели</h2>
+    </div>
+    <div class="how-sum">
+      <p><b>Тренировки, 40%.</b> Доля сделанных занятий с весами: турник 3, дом, борьба, танцы, бег по 2, хват и шпагат по 1. Пропуск силовой бьёт сильнее, чем пропуск растяжки.</p>
+      <p><b>Питание, 30%.</b> Каждый отмеченный день: в пределах ±150 ккал от нормы — полный балл, ±400 — половина, дальше — ноль. Недобор считается так же, как перебор. Сумма за неделю пересчитывается в граммы: 7700 ккал ≈ 1 кг жира.</p>
+      <p><b>Вес, 30%.</b> Средний вес за период против 7 дней до него, в пересчёте на неделю. −150…−500 г в неделю — полный балл. Стоит или растёт — меньше. Быстрее −500 г — тоже минус: риск потерять силу.</p>
+      <p><b>Совет</b> строится из сочетания. Вес стоит, а были переборы — убери переборы, норму не трогай. Вес стоит при честной норме два периода подряд — снижай норму на 150. Слишком быстро — проверь, не недоедаешь ли.</p>
+      <p><b>Твоя поддержка</b> считается после первых сводок: что съел + сколько ушло жира. Это показывает, насколько 2550 реально дефицит.</p>
+      <p><b>Расписание сводок.</b> Калории считаются с 14 октября. Первая сводка — 14–20 окт (в среду 21-го), вторая короткая — 21–25 окт (в понедельник 26-го), дальше каждую неделю пн–вс.</p>
+    </div>
+    <div class="head">
       <h2>Настройки и копия</h2>
       <p class="lede">Записи живут только в этом телефоне. Раз в пару недель сохраняй копию в «Файлы».</p>
     </div>
     <div class="entry">
       <div class="field"><label for="in-start">Стартовый вес, кг</label><input type="number" id="in-start" step="0.1" min="40" max="120" inputmode="decimal"></div>
       <div class="field"><label for="in-goal">Точка пересмотра, кг</label><input type="number" id="in-goal" step="0.1" min="40" max="120" inputmode="decimal"></div>
+      <div class="field"><label for="in-kcal">Норма, ккал в день</label><input type="number" id="in-kcal" step="50" min="1200" max="5000" inputmode="numeric"></div>
       <p class="note" style="flex-basis:100%">От старта считается коридор цели (−0,2…−0,35 кг в неделю). Дойдя до точки пересмотра, решаешь: сушить дальше или выходить на поддержку.</p>
     </div>
     <div class="backup">
@@ -325,11 +401,6 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     {ph:'Прогресс 2', note:'Пистолет: опора ниже.'},
     {ph:'Прогресс 2', note:'Последняя тяжёлая неделя перед финалом.'},
     {ph:'Финал', cp:true, note:'Сб 26 дек: финальные замеры. Потом поддержка на праздники: +250–300 ккал.'},
-  ];
-  const DAYS = [
-    {k:'mon_p', d:'Пн', w:'площадка'}, {k:'mon_h', d:'Пн', w:'дома'},
-    {k:'tue', d:'Вт', w:'танцы + хват'}, {k:'wed', d:'Ср', w:'борьба + шпагат'}, {k:'thu', d:'Чт', w:'танцы + хват'},
-    {k:'fri', d:'Пт', w:'борьба + шпагат'}, {k:'sat', d:'Сб', w:'бег + площадка'},
   ];
 // Canvas 200x140. Side view. Coordinates: h=head, n=neck/shoulder, hp=hip,
 // arms: [[elbow, hand], ...] near arm first; legs: [[knee, foot], ...] near leg first.
@@ -482,7 +553,7 @@ const POSES = {
     {k:'can', name:'Банка', sub:'кольцо / крышка пустой / полной', goal:'крышка с полной'},
   ];
 
-  const state = { log:{}, weeks:{}, tests:{}, settings:{} };
+  const state = { log:{}, weeks:{}, tests:{}, settings:{}, kcal:{} };
   const readOnly = false;
   const KEY = 'sushka-v1';
   const SEED = { log: { '2026-10-05': {date:'2026-10-05', kg:76.4, waist:82.5} } };
@@ -533,7 +604,7 @@ const POSES = {
     const [lo, hi] = band(curWeek);
     $('st-band').textContent = curWeek === 1 ? '≈ ' + kg(START_KG) : kg(lo) + '–' + kg(hi);
     $('st-band-s').textContent = curWeek === 1 ? 'вернуться к воскресенью' : 'к концу ' + curWeek + '-й недели';
-    renderVerdict(); renderToday();
+    renderVerdict(); renderToday(); renderTodayLog(); renderSums();
   }
   function renderVerdict(){
     const v = $('verdict');
@@ -630,40 +701,235 @@ const POSES = {
     });
   }
 
+  // ---------- schedule, calories, summaries ----------
+  // Sessions per weekday (0 = Mon). w = weight in the weekly training score.
+  const SCHED = [
+    [{k:'mon_p', t:'Турник', w:3}, {k:'mon_h', t:'Дом', w:2}],
+    [{k:'tue_dance', t:'Танцы', w:2}, {k:'tue_grip', t:'Хват', w:1}, {k:'tue_split', t:'Шпагат', w:1}],
+    [{k:'wed_wr', t:'Борьба', w:2}, {k:'wed_split', t:'Шпагат', w:1}],
+    [{k:'thu_dance', t:'Танцы', w:2}, {k:'thu_grip', t:'Хват', w:1}, {k:'thu_split', t:'Шпагат', w:1}],
+    [{k:'fri_wr', t:'Борьба', w:2}, {k:'fri_split', t:'Шпагат', w:1}],
+    [{k:'sat_run', t:'Бег', w:2}, {k:'sat_p', t:'Турник', w:3}],
+    [],
+  ];
+  const MIGRATE = {tue:['tue_dance'], wed:['wed_wr'], thu:['thu_dance'], fri:['fri_wr'], sat:['sat_run','sat_p']};
+  const DOW = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const DOWF = ['понедельник','вторник','среда','четверг','пятница','суббота','воскресенье'];
+  // Summary periods as day indexes from 5 Oct. Calorie tracking starts Wed 14 Oct (index 9):
+  // first period Wed–Tue, then a short bridge Wed–Sun, then Monday-to-Sunday weeks.
+  const PERIODS = (() => { const p = [{a:9,b:15},{a:16,b:20}]; for (let s = 21; s <= 77; s += 7) p.push({a:s, b:s+6}); return p; })();
+  const WATER_FLOOR = 6; // weighings before 11 Oct carry post-cheat-meal water
+  let KCAL = 2550;
+  let kcOpen = null;
+
+  const dayIso = i => iso(addDays(START, i));
+  const sessDone = (i, k) => { const w = state.weeks['w'+pad(Math.floor(i/7)+1)]; return !!(w && w.d && w.d[k]); };
+  const kcalOf = i => { const v = state.kcal[dayIso(i)]; return typeof v === 'number' ? v : null; };
+  const signed = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(Math.round(v)).toLocaleString('ru-RU');
+  function avgRange(a, b){
+    const xs = entries().filter(e => { const j = idx(e.date); return j >= a && j <= b; });
+    if (!xs.length) return null;
+    return {v: xs.reduce((s,e) => s + e.kg, 0)/xs.length, c: xs.reduce((s,e) => s + idx(e.date), 0)/xs.length, n: xs.length};
+  }
+  function scoreRate(r){ // r = kg per week
+    if (r <= -0.15 && r >= -0.5) return 1;
+    if (r > -0.15 && r <= 0) return 0.5 + 0.5*(-r/0.15);
+    if (r > 0) return Math.max(0, 0.5 - r);
+    return Math.max(0.4, 1 - (-r - 0.5)*1.5);
+  }
+  function periodLabel(P){ return fmtD(addDays(START, P.a)) + ' – ' + fmtD(addDays(START, P.b)); }
+
+  function summarize(k){
+    const P = PERIODS[k], t = idx(todayIso);
+    if (!P || t < P.a) return null;
+    const final = t > P.b, last = final ? P.b : t, len = P.b - P.a + 1;
+    // training: weighted share of planned sessions; today counts only once marked
+    let plan = 0, got = 0; const missed = [];
+    for (let i = P.a; i <= last; i++){
+      SCHED[i%7].forEach(x => {
+        const on = sessDone(i, x.k);
+        if (!final && i === t && !on) return;
+        plan += x.w; if (on) got += x.w; else if (x.w >= 2) missed.push(DOW[i%7] + ' ' + x.t.toLowerCase());
+      });
+    }
+    // food: each logged day scores 1 (±150), 0.5 (±400), 0 (further off)
+    let days = 0, logged = 0, sum = 0, sc = 0; const bigOver = [];
+    for (let i = P.a; i <= last; i++){
+      const v = kcalOf(i);
+      if (!final && i === t && v == null) continue;
+      days++; if (v == null) continue;
+      logged++; sum += v; const a = Math.abs(v); sc += a <= 150 ? 1 : a <= 400 ? 0.5 : 0;
+      if (v >= 700) bigOver.push(i);
+    }
+    // weight: average of this period vs the 7 days before it, as kg per week
+    const cur = avgRange(P.a, last), prev = avgRange(Math.max(P.a - 7, WATER_FLOOR), P.a - 1);
+    let rate = null;
+    if (cur && prev && cur.n >= 2 && cur.c - prev.c >= 3) rate = (cur.v - prev.v) / ((cur.c - prev.c)/7);
+    const parts = [
+      {k:'train', w:0.4, v: plan ? got/plan : null},
+      {k:'food',  w:0.3, v: logged ? sc/logged : null},
+      {k:'weight',w:0.3, v: rate == null ? null : scoreRate(rate)},
+    ];
+    const have = parts.filter(p => p.v != null);
+    const score = have.length >= 2 ? Math.round(100 * have.reduce((s,p) => s + p.w*p.v, 0) / have.reduce((s,p) => s + p.w, 0)) : null;
+    // recommendation
+    let rec = '';
+    const prevS = k > 0 && final ? summarize(k-1) : null;
+    if (rate == null) rec = 'Мало взвешиваний, чтобы оценить вес: нужно 3–4 утренних за неделю.';
+    else if (rate <= -0.15 && rate >= -0.5) rec = 'Темп в плане. Ничего не меняй.';
+    else if (rate > -0.15){
+      if (sum >= 1000) rec = 'Вес стоит из-за переборов: ' + signed(sum) + ' ккал ≈ ' + signed(sum/7700*1000).replace(/\D+$/,'') + ' г жира. Норму не снижай, убери переборы.';
+      else if (logged < Math.ceil(days*0.7)) rec = 'Калории отмечены ' + logged + ' из ' + days + ' дней — непонятно, в чём причина. Отмечай каждый день.';
+      else if (prevS && prevS.rate != null && prevS.rate > -0.15) rec = 'Питание по плану, а вес стоит второй период подряд. Снизь норму до ' + (KCAL - 150) + ' ккал.';
+      else rec = 'Питание по плану, а вес пока стоит. Подожди ещё неделю: если не сдвинется — снижай норму на 150.';
+    } else {
+      if (sum <= -1000) rec = 'Слишком быстро, потому что недоедал (' + signed(sum) + ' ккал). Ешь свою норму, иначе уйдёт сила.';
+      else rec = 'Слишком быстро при честной норме. Добавь 150 ккал, норма ' + (KCAL + 150) + '.';
+    }
+    const notes = [];
+    if (bigOver.some(i => i >= last - 1)) notes.push('Перебор в последние дни: вес в конце периода завышен водой, реальный результат лучше.');
+    if (plan && got/plan < 0.75 && missed.length){
+      const str = missed.filter(m => /турник|дом/.test(m));
+      notes.push('Пропущено: ' + missed.join(', ') + '.' + (str.length ? ' Силовые на сушке пропускать нельзя: именно они держат мышцы.' : ''));
+    }
+    return {k, P, final, len, dayN: last - P.a + 1, plan, got, missed, days, logged, sum, rate, parts, score, rec, notes};
+  }
+  // Maintenance estimate from finished periods: intake + weight loss converted to kcal
+  function tdeeEstimate(){
+    const xs = [];
+    PERIODS.forEach((P, k) => { const S = summarize(k); if (S && S.final && S.rate != null && S.logged >= Math.ceil(S.days*0.7)) xs.push(KCAL + S.sum/S.logged - S.rate*1100); });
+    if (!xs.length) return null;
+    const use = xs.slice(-3);
+    return {v: Math.round(use.reduce((a,b)=>a+b,0)/use.length/10)*10, n: use.length};
+  }
+  function verdictLabel(s){ return s == null ? 'Мало данных' : s >= 85 ? 'Отличная неделя' : s >= 70 ? 'Хорошая неделя' : s >= 50 ? 'Средняя неделя' : 'Слабая неделя'; }
+
+  function sumCard(S, live){
+    if (!S) return null;
+    if (live && S.dayN < 3) S = Object.assign({}, S, {score: null});
+    const card = el('article', {class:'sum' + (live ? ' live' : '')});
+    const head = el('div', {class:'sum-top'}, [
+      el('span', {class:'eyebrow', text: (live ? 'Сейчас · день ' + S.dayN + ' из ' + S.len : 'Итог') + ' · ' + periodLabel(S.P)}),
+      el('span', {class:'score' + (S.score == null ? ' na' : S.score >= 70 ? ' good' : S.score >= 50 ? ' mid' : ' bad'), text: S.score == null ? '—' : String(S.score)})
+    ]);
+    card.append(head, el('h3', {text: live ? (S.score == null ? (S.dayN < 3 ? 'Оценка появится с 3-го дня' : 'Пока мало данных') : 'Пока: ' + verdictLabel(S.score).toLowerCase()) : verdictLabel(S.score)}));
+    const bar = (label, v, txt) => el('div', {class:'brow'}, [
+      el('span', {class:'bl', text:label}),
+      el('span', {class:'bt'}, el('i', {style:'width:' + Math.round((v == null ? 0 : v)*100) + '%', class: v == null ? '' : v >= 0.85 ? 'g' : v >= 0.5 ? 'm' : 'b'})),
+      el('span', {class:'bv', text:txt})
+    ]);
+    card.append(el('div', {class:'bars'}, [
+      bar('Тренировки', S.parts[0].v, S.plan ? Math.round(S.parts[0].v*100) + '%' : '—'),
+      bar('Питание', S.parts[1].v, S.logged ? signed(S.sum) + ' ккал · ' + S.logged + '/' + S.days + ' дн' : 'не отмечено'),
+      bar('Вес', S.parts[2].v, S.rate == null ? 'мало данных' : signed(S.rate*1000).replace(/\s/g,'') + ' г/нед'),
+    ]));
+    if (!live || S.dayN >= 4) card.append(el('p', {class:'rec', text:S.rec}));
+    S.notes.forEach(n => card.append(el('p', {class:'snote', text:n})));
+    if (!live){
+      const td = tdeeEstimate();
+      if (td) card.append(el('p', {class:'snote', text:'Твоя поддержка ≈ ' + td.v + ' ккал (по ' + td.n + ' пер.). При норме ' + KCAL + ' дефицит ≈ ' + Math.max(0, td.v - KCAL) + ' ккал в день.'}));
+    }
+    return card;
+  }
+
+  function setKcal(i, v){ const d = dayIso(i); if (v == null) delete state.kcal[d]; else state.kcal[d] = v; renderSoft(); persist(); }
+  function kcalEditor(i){
+    const v = kcalOf(i), mode = v == null ? null : v === 0 ? 'ok' : v > 0 ? 'over' : 'under';
+    const wrap = el('div', {class:'kced'});
+    const seg = el('div', {class:'seg'});
+    [['ok','В норме'],['over','Перебор'],['under','Недобор']].forEach(([m, txt]) => {
+      const b = el('button', {type:'button', 'aria-pressed': m === mode ? 'true' : 'false', text:txt});
+      b.addEventListener('click', () => setKcal(i, m === 'ok' ? 0 : m === 'over' ? (v > 0 ? v : 300) : (v < 0 ? v : -300)));
+      seg.append(b);
+    });
+    wrap.append(seg);
+    if (mode === 'over' || mode === 'under'){
+      const sign = mode === 'over' ? 1 : -1;
+      const inp = el('input', {type:'number', id:'kc-' + i, step:'50', min:'50', max:'6000', inputmode:'numeric', 'aria-label':'На сколько ккал'});
+      inp.value = Math.abs(v);
+      inp.addEventListener('change', () => { const n = parseInt(inp.value, 10); if (!isNaN(n) && n > 0) setKcal(i, sign*n); });
+      const row = el('div', {class:'kcrow'}, [el('span', {class:'muted', text: mode === 'over' ? 'на +' : 'на −'}), inp, el('span', {class:'muted', text:'ккал'})]);
+      (mode === 'over' ? [200, 500, 1000, 1500] : [200, 500]).forEach(q => { const b = el('button', {type:'button', class:'q', text:(sign > 0 ? '+' : '−') + q}); b.addEventListener('click', () => setKcal(i, sign*q)); row.append(b); });
+      wrap.append(row);
+      wrap.append(el('p', {class:'note', text: mode === 'over' ? 'Сверх нормы ' + KCAL + '. Читмил обычно +1000–1500.' : 'Меньше нормы ' + KCAL + '. Сильный недобор на сушке так же плох, как перебор.'}));
+    }
+    if (v != null){ const r = el('button', {type:'button', class:'linkbtn', text:'Сбросить'}); r.addEventListener('click', () => setKcal(i, null)); wrap.append(r); }
+    return wrap;
+  }
+  function sesButton(i, x){
+    const id = 'w' + pad(Math.floor(i/7)+1), on = sessDone(i, x.k);
+    const b = el('button', {type:'button', class:'ses', 'aria-pressed': on ? 'true' : 'false', 'aria-label': x.t + ', ' + DOWF[i%7] + ' ' + fmtD(addDays(START, i)), text:x.t});
+    b.addEventListener('click', () => toggleDay(id, x.k));
+    return b;
+  }
+  function kcCell(i){
+    const v = kcalOf(i);
+    const cls = 'kc' + (v == null ? '' : v === 0 ? ' ok' : Math.abs(v) > 400 ? ' bad' : ' mid') + (kcOpen === i ? ' open' : '');
+    const b = el('button', {type:'button', class:cls, 'aria-label':'Калории, ' + fmtD(addDays(START, i)), text: v == null ? 'ккал' : v === 0 ? 'норма' : signed(v)});
+    b.addEventListener('click', () => { kcOpen = kcOpen === i ? null : i; renderWeeks(); });
+    return b;
+  }
+
   function renderWeeks(){
     const box = $('weeks'); box.textContent = '';
-    WEEKS.forEach((wk, i) => {
-      const n = i+1, id = 'w'+pad(n);
-      const s = addDays(START, i*7), e = addDays(START, i*7+6);
-      const done = (state.weeks[id] && state.weeks[id].d) || {};
-      const count = DAYS.filter(d => done[d.k]).length;
-      const avg = weekAvg(n);
-      const [lo, hi] = band(n);
-      const days = el('div', {class:'days'}, DAYS.map(d => {
-        const b = el('button', {type:'button', class:'day', 'aria-pressed': done[d.k] ? 'true' : 'false', 'aria-label': d.d+' '+d.w+', неделя '+n});
-        b.append(d.d, el('small', {text:d.w}));
-        b.disabled = readOnly;
-        b.addEventListener('click', () => toggleDay(id, d.k));
-        return b;
-      }));
+    const t = idx(todayIso), total = SCHED.reduce((a, ss) => a + ss.length, 0);
+    WEEKS.forEach((wk, wi) => {
+      const n = wi + 1, s = addDays(START, wi*7), e = addDays(START, wi*7 + 6);
+      const avg = weekAvg(n), [lo, hi] = band(n);
+      let cnt = 0;
+      const grid = el('div', {class:'dgrid'});
+      for (let d = 0; d < 7; d++){
+        const i = wi*7 + d;
+        const col = el('div', {class:'dcol' + (i === t ? ' today' : '')}, el('div', {class:'dh', text:DOW[d]}));
+        if (SCHED[d].length) SCHED[d].forEach(x => { if (sessDone(i, x.k)) cnt++; col.append(sesButton(i, x)); });
+        else col.append(el('div', {class:'rest', text:'отдых'}));
+        if (i >= PERIODS[0].a) col.append(kcCell(i));
+        grid.append(col);
+      }
       const tagCls = wk.cp ? 'tag cp' : wk.dl ? 'tag dl' : 'tag';
-      box.append(el('div', {class:'wk' + (n === curWeek ? ' now' : ''), id:'week-'+n}, [
-        el('div', {}, [el('div', {class:'n', text:'Н'+n}), el('div', {class:'d', text: fmtD(s)+' – '+fmtD(e)})]),
-        el('div', {class:'body'}, [
-          el('div', {class:'ph'}, [el('span', {class:tagCls, text:wk.ph}), el('span', {class:'txt', text:wk.note})]),
-          days,
-          (() => { const st = stageOf(n); const det = el('details'); det.append(el('summary', {text:'Что уметь на этой неделе'}));
-            const g = el('div', {class:'targets'});
-            ['ctb','wpull','dips','fl','hs','pistol','pike','lsit','pplan','t2b','pinch','towel','can','split','standsplit'].forEach(k => { g.append(el('span', {class:'nm', text:EX[k].n}), el('span', {class:'tg', text:EX[k].t[st]})); });
-            det.append(g); return det; })()
+      const block = el('div', {class:'wk2' + (n === curWeek ? ' now' : ''), id:'week-' + n}, [
+        el('div', {class:'wk-head'}, [
+          el('div', {}, [el('span', {class:'n', text:'Н' + n}), el('span', {class:'d', text:fmtD(s) + ' – ' + fmtD(e)})]),
+          el('div', {class:'wk-side'}, [el('span', {class:'num', text: avg == null ? '—' : kg(avg)}), el('span', {text: n === 1 ? 'цель ≈ ' + kg(START_KG) : 'цель ' + kg(lo) + '–' + kg(hi)})])
         ]),
-        el('div', {class:'side'}, [
-          el('span', {class:'num', text: avg == null ? '—' : kg(avg)}),
-          el('span', {text: n === 1 ? 'цель ≈ ' + kg(START_KG) : 'цель ' + kg(lo) + '–' + kg(hi)}),
-          el('span', {text: count + '/7 трен.'})
-        ])
-      ]));
+        el('div', {class:'ph'}, [el('span', {class:tagCls, text:wk.ph}), el('span', {class:'txt', text:wk.note})]),
+        grid
+      ]);
+      if (kcOpen != null && Math.floor(kcOpen/7) === wi)
+        block.append(el('div', {class:'kced-box'}, [el('div', {class:'kced-title', text:'Калории · ' + DOWF[kcOpen%7] + ', ' + fmtD(addDays(START, kcOpen))}), kcalEditor(kcOpen)]));
+      block.append(el('div', {class:'wk-foot', text: cnt + ' из ' + total + ' занятий'}));
+      const st = stageOf(n), det = el('details');
+      det.append(el('summary', {text:'Что уметь на этой неделе'}));
+      const g = el('div', {class:'targets'});
+      ['ctb','wpull','dips','fl','hs','pistol','pike','lsit','pplan','t2b','pinch','towel','can','split','standsplit'].forEach(k => g.append(el('span', {class:'nm', text:EX[k].n}), el('span', {class:'tg', text:EX[k].t[st]})));
+      det.append(g); block.append(det);
+      box.append(block);
     });
+  }
+
+  function renderTodayLog(){
+    const box = $('today-log'); box.textContent = '';
+    const i = idx(todayIso);
+    if (i < 0 || i > 83){ box.hidden = true; return; }
+    box.hidden = false;
+    const row = el('div', {class:'tses'});
+    if (SCHED[i%7].length) SCHED[i%7].forEach(x => row.append(sesButton(i, x)));
+    else row.append(el('span', {class:'muted', text:'Сегодня отдых.'}));
+    box.append(el('h2', {text:'Отметь сегодня'}), row, el('div', {class:'kced-title', text:'Калории сегодня · норма ' + KCAL}), kcalEditor(i));
+  }
+  function renderSums(){
+    const t = idx(todayIso);
+    const list = $('sums'), ts = $('today-sum');
+    list.textContent = ''; ts.textContent = '';
+    for (let k = PERIODS.length - 1; k >= 0; k--){
+      const S = summarize(k); if (!S) continue;
+      list.append(sumCard(S, !S.final));
+    }
+    if (!list.children.length) list.append(el('p', {class:'muted', text:'Первая сводка — в среду, 21 октября, за 14–20 октября.'}));
+    const fresh = PERIODS.findIndex(P => t > P.b && t - P.b <= 2);
+    const cur = PERIODS.findIndex(P => t >= P.a && t <= P.b);
+    if (fresh >= 0) ts.append(sumCard(summarize(fresh), false));
+    if (cur >= 0 && (cur > 0 || fresh < 0)) ts.append(sumCard(summarize(cur), true));
   }
 
   function renderTests(){
@@ -726,7 +992,15 @@ const POSES = {
     const g = parseFloat(state.settings && state.settings.goalKg);
     GOAL_KG = isNaN(g) ? Math.round((START_KG - 2.5)*10)/10 : g;
     $('in-start').value = START_KG; $('in-goal').value = GOAL_KG;
+    const kc = parseInt(state.settings && state.settings.kcal, 10);
+    KCAL = isNaN(kc) ? 2550 : kc; $('in-kcal').value = KCAL;
   }
+  $('in-kcal').addEventListener('change', () => {
+    const v = parseInt($('in-kcal').value, 10);
+    if (isNaN(v) || v < 1200 || v > 5000) { applySettings(); return; }
+    state.settings = Object.assign({}, state.settings, {kcal: Math.round(v/10)*10});
+    applySettings(); renderAll(); persist();
+  });
   $('in-goal').addEventListener('change', () => {
     const v = parseFloat(String($('in-goal').value).replace(',', '.'));
     if (isNaN(v) || v < 40 || v > 120) { applySettings(); return; }
@@ -763,6 +1037,8 @@ const POSES = {
         state.weeks = Object.assign({}, state.weeks, p.weeks || {});
         state.tests = Object.assign({}, state.tests, p.tests || {});
         state.settings = Object.assign({}, state.settings, p.settings || {});
+        state.kcal = Object.assign({}, state.kcal, p.kcal || {});
+        migrateWeeks();
         applySettings(); renderAll(); persist();
         bnote('Восстановлено: ' + n + ' взвеш. Новые записи добавлены к текущим.');
       } catch(e){ bnote('Это не файл копии трекера.', true); }
@@ -813,9 +1089,11 @@ const POSES = {
   let loaded = false;
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; loaded = true; }
+    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; state.kcal = p.kcal || {}; loaded = true; }
   } catch(e){}
   if (!loaded){ state.log = Object.assign({}, SEED.log); persist(); }
+  function migrateWeeks(){ let ch = false; Object.values(state.weeks).forEach(w => { if (!w || !w.d) return; Object.entries(MIGRATE).forEach(([o, ns]) => { if (w.d[o]) { ns.forEach(n => w.d[n] = true); delete w.d[o]; ch = true; } }); }); return ch; }
+  if (migrateWeeks()) persist();
   applySettings();
   renderAll(); renderTrain();
   (() => { let p = 'today'; try { p = localStorage.getItem(KEY+'-tab') || 'today'; } catch(e){} if (location.hash.length > 1) p = location.hash.slice(1); showPage(p); })();
