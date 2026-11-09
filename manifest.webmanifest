@@ -1,6 +1,6 @@
 {
-  "name": "Сушка 74→72",
-  "short_name": "Сушка",
+  "name": "Форма",
+  "short_name": "Форма",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
