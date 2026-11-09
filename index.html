@@ -159,6 +159,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .kc.ex{border-style:solid;border-color:var(--line);background:var(--mark-soft);color:var(--mark);cursor:default;text-align:center}
 #p-march .linkbtn{margin-bottom:4px}
 
+/* day bar */
+.daybar{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;align-items:center;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);padding-block:6px}
+.db-arrow{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:28px;line-height:1;cursor:pointer}
+.db-arrow:disabled{opacity:.3;cursor:default}
+.db-mid{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;min-width:0}
+.db-mid b{font-size:15.5px}
+.db-mid small{font-size:12px;color:var(--muted)}
 /* today blocks */
 .plan-blk{display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .plan-blk.done{border-color:var(--accent)}
@@ -386,7 +393,8 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   <section class="page on" id="p-today" role="tabpanel">
     <div id="backup-banner" hidden></div>
     <div id="march-banner" hidden></div>
-    <section class="card" id="today-log" aria-label="Отметь сегодня"></section>
+    <div class="daybar" id="daybar"></div>
+    <section class="card" id="today-log" aria-label="Отметки за день"></section>
     <form class="entry" id="f-entry" autocomplete="off">
       <div class="field"><label for="in-date">Дата</label><input type="date" id="in-date" required min="2026-09-28"></div>
       <div class="field"><label for="in-kg">Вес, кг</label><div class="kgrow"><button type="button" class="sb sm" id="kg-minus" aria-label="Вес минус 0,1">−</button><input type="number" id="in-kg" step="0.1" min="40" max="120" inputmode="decimal" placeholder="75.0" required><button type="button" class="sb sm" id="kg-plus" aria-label="Вес плюс 0,1">+</button></div></div>
@@ -862,23 +870,49 @@ const POSES = {
     }
     v.innerHTML = msg;
   }
+  // Day being viewed on «Сегодня». Before 4 a.m. it opens on yesterday: late workouts belong to the day they started.
+  const nowIdx = idx(todayIso);
+  let viewIdx = Math.max(0, nowIdx - (new Date().getHours() < 4 ? 1 : 0));
+  const viewWeek = () => Math.floor(viewIdx/7) + 1;
+  const jsDow = i => (i % 7 + 1) % 7; // our 0 = Monday, JS 0 = Sunday
+  function dayLabel(i){ const rel = i === nowIdx ? 'сегодня' : i === nowIdx - 1 ? 'вчера' : i === nowIdx + 1 ? 'завтра' : ''; return DOWF[i%7][0].toUpperCase() + DOWF[i%7].slice(1) + ', ' + fmtD(addDays(START, i)) + (rel ? ' · ' + rel : ''); }
+  function setView(i){
+    viewIdx = Math.max(0, Math.min(nowIdx, i));
+    $('in-date').value = dayIso(viewIdx);
+    renderDayBar(); renderToday(); renderTodayLog();
+  }
+  function renderDayBar(){
+    const b = $('daybar'); b.textContent = '';
+    const prev = el('button', {type:'button', class:'db-arrow', 'aria-label':'Предыдущий день', text:'‹'});
+    const next = el('button', {type:'button', class:'db-arrow', 'aria-label':'Следующий день', text:'›'});
+    prev.addEventListener('click', () => setView(viewIdx - 1));
+    next.addEventListener('click', () => setView(viewIdx + 1));
+    prev.disabled = viewIdx <= 0; next.disabled = viewIdx >= nowIdx;
+    const mid = el('div', {class:'db-mid'}, [el('b', {text: dayLabel(viewIdx)})]);
+    if (viewIdx !== nowIdx){
+      const back = el('button', {type:'button', class:'linkbtn', text:'к сегодня'});
+      back.addEventListener('click', () => setView(nowIdx));
+      mid.append(back);
+    } else if (new Date().getHours() < 4) mid.append(el('small', {text:'после полуночи'}));
+    b.append(prev, mid, next);
+  }
   function renderToday(){
     const box = $('today-plan'); box.textContent = '';
-    const dow = new Date().getDay(), i = idx(todayIso);
-    const sp = SPECIAL[todayIso];
+    const i = viewIdx, dow = jsDow(i), wk = viewWeek();
+    const sp = SPECIAL[dayIso(i)];
     const keys = sp && sp.plan ? sp.plan : (DAY_OF_WEEK_PLAN[dow] || []);
     if (sp && sp.note) box.append(el('p', {class:'alert', text: sp.note}));
     else if (OTHER_DAYS[dow]) box.append(el('p', {class:'muted', text: OTHER_DAYS[dow]}));
     if (!keys.length) return;
     keys.forEach(k => {
       const d = DAYS_PLAN.find(x => x.k === k);
-      const list = d.ex.map(x => planFor(x, curWeek)).filter(Boolean);
+      const list = d.ex.map(x => planFor(x, wk)).filter(Boolean);
       const sk = sessKeysFor(k, i), done = sk.length > 0 && sk.every(x => sessDone(i, x));
       const go = el('button', {type:'button', class:'tm-open go'}, [el('span', {class:'tm-ico', text: done ? '✓' : '▶'}), el('span', {text: done ? 'Сделано · ещё раз' : 'Начать тренировку'}), el('small', {text: list.length + ' упр. · ~' + estMin(list) + ' мин'})]);
       go.addEventListener('click', () => openWorkout(k));
       const det = el('details', {class:'plan-ex'});
       det.append(el('summary', {text:'Упражнения и техника'}));
-      d.ex.forEach(x => det.append(exCard(x, curWeek, true)));
+      d.ex.forEach(x => det.append(exCard(x, wk, true)));
       box.append(el('section', {class:'plan-blk' + (done ? ' done' : '')}, [el('h3', {text:d.title}), el('p', {class:'note', text:d.where}), go, det]));
     });
   }
@@ -1311,15 +1345,15 @@ const POSES = {
 
   function renderTodayLog(){
     const box = $('today-log'); box.textContent = '';
-    const i = idx(todayIso);
+    const i = viewIdx, isToday = i === nowIdx, ttl = isToday ? 'Отметь сегодня' : 'Отметь за ' + fmtD(addDays(START, i));
     if (i < 0){ box.hidden = true; return; }
     box.hidden = false;
     const row = el('div', {class:'tses'});
     if (schedFor(i).length) schedFor(i).forEach(x => row.append(sesButton(i, x)));
     else row.append(el('span', {class:'muted', text: (specialOf(i) && specialOf(i).rest === 'старт') ? 'Сегодня без тренировок: вечером старт марша.' : 'Сегодня отдых.'}));
     const sp = specialOf(i);
-    if (sp && sp.kx) box.append(el('h2', {text:'Отметь сегодня'}), row, el('p', {class:'note', text: sp.kx === 'марш' ? 'Калории сегодня не считаются: ешь столько, сколько нужно для марша.' : sp.kx === 'загр' ? 'Калории сегодня не идут в оценку: это загрузка перед маршем, +300–500 углеводами.' : 'Калории сегодня не идут в оценку: восстановление, около 2900 ккал.'}));
-    else box.append(el('h2', {text:'Отметь сегодня'}), row, el('div', {class:'kced-title', text:'Калории сегодня · норма ' + KCAL}), kcalEditor(i));
+    if (sp && sp.kx) box.append(el('h2', {text:ttl}), row, el('p', {class:'note', text: sp.kx === 'марш' ? 'Калории сегодня не считаются: ешь столько, сколько нужно для марша.' : sp.kx === 'загр' ? 'Калории сегодня не идут в оценку: это загрузка перед маршем, +300–500 углеводами.' : 'Калории сегодня не идут в оценку: восстановление, около 2900 ккал.'}));
+    else box.append(el('h2', {text:ttl}), row, el('div', {class:'kced-title', text:(isToday ? 'Калории сегодня' : 'Калории за ' + fmtD(addDays(START, i))) + ' · норма ' + KCAL}), kcalEditor(i));
     box.append(dayExtras(i));
   }
   // protein (one tap) and sleep (hours) per day
@@ -1630,11 +1664,12 @@ const POSES = {
   }
   function recordSet(entry){
     state.sets = state.sets || {};
-    state.sets[todayIso] = (state.sets[todayIso] || []).concat([Object.assign({at: new Date().toISOString()}, entry)]);
+    const d = dayIso(TM.day != null ? TM.day : nowIdx);
+    state.sets[d] = (state.sets[d] || []).concat([Object.assign({at: new Date().toISOString()}, entry)]);
     TM.logged++; persist();
   }
 
-  const TM = {mode:'single', cfg:null, list:[], sel:[], plan:null, steps:[], i:0, endAt:0, left:0, paused:false, pauseAt:0, pauseAcc:0, workStart:0,
+  const TM = {day:null, mode:'single', cfg:null, list:[], sel:[], plan:null, steps:[], i:0, endAt:0, left:0, paused:false, pauseAt:0, pauseAcc:0, workStart:0,
     rep:0, kg:0, kgFor:{}, logged:0, timer:0, voice:true, ac:null, lock:null, lastSec:null};
   try { TM.voice = localStorage.getItem(KEY+'-voice') !== '0'; } catch(e){}
   function beep(freq, ms, vol){
@@ -1667,14 +1702,16 @@ const POSES = {
 
   function openOverlay(){ const ov = $('tm'); ov.hidden = false; ov.className = 'tm setup'; document.body.style.overflow = 'hidden'; }
   function openTimer(k){
-    const c = timerPlan(k, curWeek); if (!c) return;
+    TM.day = viewIdx;
+    const c = timerPlan(k, viewWeek()); if (!c) return;
     TM.mode = 'single'; TM.cfg = c; TM.plan = null;
     openOverlay(); renderSetup();
   }
   function openWorkout(planKey){
     const plan = DAYS_PLAN.find(x => x.k === planKey); if (!plan) return;
     TM.mode = 'workout'; TM.plan = plan; TM.cfg = null;
-    TM.list = plan.ex.map(k => planFor(k, curWeek)).filter(Boolean);
+    TM.day = viewIdx;
+    TM.list = plan.ex.map(k => planFor(k, viewWeek())).filter(Boolean);
     TM.sel = TM.list.map(() => true);
     openOverlay(); renderWorkoutSetup();
   }
@@ -1717,7 +1754,7 @@ const POSES = {
   }
   function renderWorkoutSetup(){
     const box = $('tm-body'); box.textContent = '';
-    $('tm-title').textContent = TM.plan.title;
+    $('tm-title').textContent = TM.plan.title + (TM.day !== nowIdx ? ' · ' + fmtD(addDays(START, TM.day)) : '');
     const chosen = TM.list.filter((_, j) => TM.sel[j]);
     $('tm-sub').textContent = chosen.length + ' ' + plural(chosen.length, 'упражнение', 'упражнения', 'упражнений') + ' · около ' + (chosen.length ? estMin(chosen) : 0) + ' мин';
     const ul = el('ul', {class:'mlist wl'});
@@ -1774,7 +1811,7 @@ const POSES = {
     else if (s.type === 'done'){
       beep(880, 200); setTimeout(() => beep(1175, 500), 220);
       clearInterval(TM.timer); TM.timer = 0; wake(false);
-      if (TM.mode === 'workout'){ const i = idx(todayIso); TM.marked = sessKeysFor(TM.plan.k, i); markSess(i, TM.marked); say('Тренировка закончена. Отлично.'); }
+      if (TM.mode === 'workout'){ const i = TM.day; TM.marked = sessKeysFor(TM.plan.k, i); markSess(i, TM.marked); say('Тренировка закончена. Отлично.'); }
       else say('Готово. Упражнение закончено.');
     }
     if (s.dur === 0) return next(false);
@@ -1836,7 +1873,7 @@ const POSES = {
       main.append(el('span', {class:'tm-task', text:c.txt}), el('span', {class:'tm-tap', text:'Коснись, когда сделаешь'}));
     } else if (s.type === 'done'){
       main.append(el('span', {class:'tm-big done', text:'✓'}));
-      if (wo && TM.marked && TM.marked.length) main.append(el('span', {class:'tm-unit', text:'Отмечено: ' + schedFor(idx(todayIso)).filter(x => TM.marked.includes(x.k)).map(x => x.t).join(', ')}));
+      if (wo && TM.marked && TM.marked.length) main.append(el('span', {class:'tm-unit', text:'Отмечено: ' + schedFor(TM.day).filter(x => TM.marked.includes(x.k)).map(x => x.t).join(', ')}));
       main.append(el('span', {class:'tm-tap', text:'Коснись, чтобы закрыть'}));
     } else {
       main.append(el('span', {class:'tm-big', text:fmtT(TM.left)}));
@@ -2032,7 +2069,7 @@ const POSES = {
     state.settings = Object.assign({}, state.settings, {plan2Set: true}); persist();
   }
   applySettings();
-  renderAll(); renderTrain(); renderMarch(); prefillKg(); waistReminder(); renderProgress();
+  renderAll(); renderTrain(); renderMarch(); prefillKg(); waistReminder(); renderProgress(); setView(viewIdx);
   (() => { let p = 'today'; try { p = localStorage.getItem(KEY+'-tab') || 'today'; } catch(e){} if (location.hash.length > 1) p = location.hash.slice(1); showPage(p); })();
 
   if ('serviceWorker' in navigator) {
