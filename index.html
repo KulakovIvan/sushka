@@ -158,6 +158,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .mday b{font-family:var(--f-mono);font-size:12.5px}
 .kc.ex{border-style:solid;border-color:var(--line);background:var(--mark-soft);color:var(--mark);cursor:default;text-align:center}
 #p-march .linkbtn{margin-bottom:4px}
+/* history */
+.hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.hist li{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.hist .hw{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 /* tabs */
 html{padding-bottom:0}
 body{padding-block:20px 96px}
@@ -429,6 +433,11 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
       <p><b>Расписание сводок.</b> Калории считаются с 14 октября. Первая сводка — 14–20 окт (в среду 21-го), вторая короткая — 21–25 окт (в понедельник 26-го), дальше каждую неделю пн–вс.</p>
     </div>
     <div class="head">
+      <h2>История изменений</h2>
+      <p class="lede">Что и когда менялось в плане и настройках — для аналитики. Попадает в копию.</p>
+    </div>
+    <ul class="hist" id="hist"></ul>
+    <div class="head">
       <h2>Настройки и копия</h2>
       <p class="lede">Записи живут только в этом телефоне. Раз в пару недель сохраняй копию в «Файлы».</p>
     </div>
@@ -511,7 +520,8 @@ const POSES = {
   lsit_full:{h:[88,44],n:[88,58],hp:[90,98],arms:[[[88,84],[88,108]],[[90,84],[90,108]]],legs:[[[124,96],[160,96]],[[124,98],[160,98]]],props:[{t:'brick',x:76,y:108},{t:'floor',y:136}],note:{text:'ноги прямые, носки на себя',x:150,y:50,ax:150,ay:92}},
   pplanche:{h:[52,86],n:[70,90],hp:[126,88],arms:[[[80,112],[88,136]],[[84,114],[92,136]]],legs:[[[154,110],[182,134]],[[156,112],[184,136]]],props:[{t:'floor',y:136},{t:'arrowh',x:46,y:112,len:22}],note:{text:'плечи впереди кистей, пальцы в стороны',x:120,y:40,ax:76,ay:98}},
   row:{h:[62,52],n:[76,56],hp:[116,68],arms:[[[84,82],[82,106]],[[88,80],[86,88]]],legs:[[[108,102],[118,136]],[[110,104],[120,136]]],props:[{t:'floor',y:136},{t:'kb',x:82,y:118,s:1}],note:{text:'спина прямая, локоть вдоль тела, вниз 3 с',x:150,y:112,ax:86,ay:86}},
-  pinch:{h:[96,34],n:[96,48],hp:[98,88],arms:[[[112,70],[116,92]],[[82,70],[80,92]]],legs:[[[96,112],[94,136]],[[102,112],[104,136]]],props:[{t:'floor',y:136},{t:'block',x:116,y:92},{t:'kb',x:116,y:124,s:1}],note:{text:'блок зажат большим пальцем и четырьмя, гиря висит на резине',x:150,y:60,ax:116,ay:94}},
+  khold:{h:[96,34],n:[96,48],hp:[98,88],arms:[[[112,70],[116,92]],[[82,70],[80,92]]],legs:[[[96,112],[94,136]],[[102,112],[104,136]]],props:[{t:'floor',y:136},{t:'kb',x:116,y:104,s:1}],note:{text:'гиря висит в руке, плечо вниз, корпус ровно',x:150,y:60,ax:116,ay:96}},
+  pinch:{h:[96,34],n:[96,48],hp:[98,88],arms:[[[112,70],[116,92]],[[82,70],[80,92]]],legs:[[[96,112],[94,136]],[[102,112],[104,136]]],props:[{t:'floor',y:136},{t:'box',x:110,y:92,w:13,h:26},{t:'box',x:110,y:92,w:13,h:13}],note:{text:'книги зажаты щипком: большой палец против четырёх',x:150,y:60,ax:116,ay:94}},
   towel:{h:[100,56],n:[100,70],hp:[100,106],arms:[[[90,48],[88,34]],[[110,48],[112,34]]],legs:[[[100,124],[100,138]],[[100,124],[100,138]]],props:[{t:'bar',y:16},{t:'towel',x:100,y:34}],note:{text:'вис на полотенце, кулаки сжаты до белых костяшек',x:150,y:60,ax:100,ay:34}},
   ftip:{h:[52,86],n:[70,90],hp:[126,88],arms:[[[80,112],[86,134]],[[84,114],[90,134]]],legs:[[[154,110],[182,134]],[[156,112],[184,136]]],props:[{t:'floor',y:136},{t:'tips',x:86,y:134}],note:{text:'на пальцах, ладонь не касается пола',x:150,y:50,ax:86,ay:132}},
   bandext:{h:[96,34],n:[96,48],hp:[98,88],arms:[[[118,66],[136,52]],[[80,66],[78,90]]],legs:[[[96,112],[94,136]],[[102,112],[104,136]]],props:[{t:'floor',y:136},{t:'hand',x:136,y:52}],note:{text:'резинка на пальцах, раскрываешь кисть веером',x:150,y:100,ax:136,ay:52}},
@@ -544,15 +554,17 @@ const POSES = {
     dipss: {n:'Брусья медленные', p:['dip_top','dip_bottom'], how:'Вниз <b>3 секунды</b>, внизу пауза, вверх обычным темпом.', cues:['Плечи ниже локтей','Корпус чуть вперёд'], t:['4×8','4×10','2×8','4×12','4×12 с 5 кг']},
     lsitb: {n:'Уголок на брусьях, удержание', p:['lsit_knee','lsit_full'], how:'То же, что уголок дома, но на брусьях: <b>держишь, не повторы</b>.', cues:['Руки прямые','Носки на себя, колени в замке'], t:['4×10 с колени','4×10 с одна нога','2×10 с','4×8 с обе','4×15 с']},
     row:   {n:'Тяга гири в наклоне', p:['row'], how:'Наклон 45°, спина прямая, гиря к поясу. <b>Вниз 3 секунды</b>, вверху пауза.', cues:['Локоть вдоль тела','Лопатку сводишь к позвоночнику'], t:['3×10 на руку','3×12','2×10','3×12 вниз 3 с','3×15 вниз 3 с']},
-    pinch: {n:'Щипок с блоком', p:['pinch'], how:'Самодельный блок: пробковый кирпич обмотай резиной, в петлю повесь гирю. Бери кирпич <b>щипком</b>: большой палец с одной стороны, четыре с другой. Поднял, держишь, опустил.', cues:['Кисть прямая, не выгибай','Сначала без гири, потом с ней на полу (приподнимаешь на 5 см)','Это главное для банки: крышку рвёт именно щипок'], t:['5×10 с, кирпич + гиря на полу','5×15 с, гиря оторвана','3×10 с','5×20 с, гиря оторвана','5×30 с или 2 кирпича в щипке']},
-    towel: {n:'Вис и подтягивания на полотенце', p:['towel'], how:'Перекинь полотенце через турник, держись за оба конца. Сначала <b>вис</b>, потом подтягивания. Качает сжатие кисти и предплечья.', cues:['Полотенце толстое, свёрнутое в жгут','Плечи вниз, не висни на связках','Руки не разгибай до щелчка'], t:['3×20 с вис','3×30 с вис','2×20 с','3×5 подтягиваний','3×8 подтягиваний']},
+    pinch: {n:'Щипок: книги, потом гиря за рог', p:['pinch'], how:'Возьми 2–3 толстые книги, сложи стопкой и держи на весу <b>щипком</b>: большой палец с одной стороны, четыре — с другой. Стопка толще и тяжелее — сложнее. С 8-й недели — гиря 16 кг: бери щипком за боковую часть ручки («рог»), отрывай от пола на 5 см и держи.', cues:['Кисть прямая, не выгибай','Держат подушечки пальцев, ладонь не помогает','Это главное для банки: крышку рвёт именно щипок'], t:['5×15 с, 2 толстые книги','5×20 с, 3 книги','3×15 с','5×10 с, гиря за рог','5×20 с, гиря за рог']},
+    khold: {n:'Удержание гири одной рукой', p:['khold'], how:'Гиря 16 кг висит в опущенной руке, ты стоишь ровно или медленно ходишь по квартире. <b>Сжимаешь ручку изо всех сил</b>, плечо вниз, корпус не кренится. Качает сжатие кисти и предплечье.', cues:['Ручку держи ближе к пальцам, не в глубине ладони — так тяжелее','Плечо не тянется к уху','Меняй руку без отдыха между сторонами'], t:['3×30 с на руку','3×40 с','2×30 с','3×45 с','3×60 с']},
+    towel: {n:'Вис на полотенце', p:['towel'], how:'Перекинь полотенце через турник, держись за оба конца. Только на площадке.', cues:['Полотенце свёрнутое в жгут'], t:['3×20 с вис','3×30 с вис','2×20 с','3×5 подтягиваний','3×8 подтягиваний']},
     ftip:  {n:'Отжимания на пальцах', p:['ftip'], how:'Упор лёжа на кончиках пальцев, ладонь не касается пола. Сначала <b>с колен</b> или просто удержание, потом полные отжимания.', cues:['Пальцы чуть согнуты, как лапа, не плоско','Большой палец тоже работает','Болят суставы — только удержание'], t:['3×15 с удержание с колен','3×5 отжиманий с колен','2×15 с','3×5 полных','3×10 полных']},
     bandext:{n:'Разгибание пальцев с резинкой', p:['bandext'], how:'Канцелярскую резинку (или тонкую петлю от жгута) надень на все пять пальцев и <b>раскрывай кисть веером</b>. Это баланс для всего, что ты сжимаешь: защищает локти и связки.', cues:['Медленно, 2 с туда и обратно','Делай после каждой хватовой тренировки','Можно во время учёбы'], t:['2×20','3×20','2×20','3×25','3×30']},
     can:   {n:'Банка: техника', p:['can'], how:'Пустую банку сначала <b>вомни по ободку</b> в одном месте большим пальцем. Большой палец на центр крышки, четыре — под край ободка. Сильно сжимаешь щипком, <b>вращаешь крышку</b> и тянешь на себя. Начинай с пустой, потом с полной.', cues:['Край алюминия режет: обмотай большой и указательный пластырем или тейпом','Пока не зажила мозоль — не пробуй','Сначала отрывай кольцо-ключ целиком, потом крышку'], t:['смотри технику, пустая банка: вмять ободок','пустая: оторвать кольцо целиком','—','пустая: вмять и вращать крышку','пустая, потом полная: оторвать крышку']},
+    splitwarm: {n:'Разминка перед шпагатом', p:['lunge'], how:'5 упражнений по минуте, чтобы тело стало тёплым: <b>1</b> прыжки «звёздочка», <b>2</b> махи ногой вперёд-назад у стены (по 30 с на ногу), <b>3</b> глубокие приседания, <b>4</b> выпады с переходом, <b>5</b> круги тазом и наклоны. Можно вместо этого горячий душ на 5 минут и махи.', cues:['Холодные мышцы тянутся хуже и легче травмируются','Коврик, два кирпича, стена или диван рядом','Носки на гладком полу помогают плавно съезжать в шпагат'], t:['5×60 с','5×60 с','5×60 с','5×60 с','5×60 с']},
     couch: {n:'Растяжка сгибателя бедра', p:['couch'], how:'Колено задней ноги у стены или у дивана, голень вверх по стене. Передняя нога стоит. <b>Подкрути таз вперёд</b> и выпрямись. Тянет перед бедра задней ноги. Без этого шпагат не уйдёт: задняя нога ограничивает больше, чем передняя.', cues:['Ягодицу задней ноги сжимай — так тянется правильно','Поясницу не прогибай','Дыши, 60–90 с на ногу'], t:['2×45 с на ногу','2×60 с','1×60 с','2×90 с','2×90 с, корпус назад']},
     halfsplit:{n:'Полушпагат на заднюю поверхность', p:['halfsplit'], how:'Из выпада садишься на заднее колено, переднюю ногу выпрямляешь, носок на себя. Наклон <b>от таза</b>, спина длинная, не круглая.', cues:['Руки на кирпичи, если до пола далеко','Тянешься грудью к стопе, не лбом к колену','Напряги переднее бедро на 5 с, расслабь — уйдёт глубже (ПНФ)'], t:['2×45 с на ногу','2×60 с','1×60 с','2×90 с','2×90 с, ладони на полу']},
     lunge: {n:'Низкий выпад', p:['lunge'], how:'Заднее колено на полу, переднее под углом 90°. Таз <b>вниз и вперёд</b>, руки на полу или на кирпичах по бокам.', cues:['Переднее колено не уходит за носок','Задняя нога прямая, стопа вытянута','Таз ровно, не разворачивай'], t:['2×45 с','2×60 с','1×60 с','2×90 с','2×90 с']},
-    split: {n:'Шпагат на кирпичах', p:['split_blocks','split_full'], how:'Из выпада скользишь передней пяткой вперёд, <b>руки на кирпичах</b> держат вес. Опускаешься до натяжения, не до боли, и дышишь. Задняя нога прямая, стопа вытянута.', cues:['Таз смотрит вперёд, не разворачивай в сторону','Передняя пятка на полу, носок на себя','Только тёплым: после танцев или борьбы','Никаких покачиваний, держишь и дышишь'], t:['2×60 с на ногу, на двух кирпичах','2×90 с, на двух','1×60 с','2×90 с, на одном кирпиче','2×2 мин, кирпич или ладони на полу']},
+    split: {n:'Шпагат на кирпичах', p:['split_blocks','split_full'], how:'Из выпада скользишь передней пяткой вперёд, <b>руки на кирпичах</b> держат вес. Опускаешься до натяжения, не до боли, и дышишь. Задняя нога прямая, стопа вытянута.', cues:['Таз смотрит вперёд, не разворачивай в сторону','Передняя пятка на полу, носок на себя','Только после разминки','Никаких покачиваний, держишь и дышишь'], t:['2×60 с на ногу, на двух кирпичах','2×90 с, на двух','1×60 с','2×90 с, на одном кирпиче','2×2 мин, кирпич или ладони на полу']},
     standsplit:{n:'Вертикальный шпагат у стены', p:['standsplit'], how:'Ладони на пол, одну ногу поднимаешь назад и <b>упираешь в стену</b>. Опорная нога прямая, корпус к ней. Это вход в вертикальный шпагат — его начинай только когда обычный уже близко к полу.', cues:['Таз закрыт, бедро поднятой ноги не раскрывается','Опорная нога прямая','Сначала у стены, потом махи'], t:['—','—','—','2×30 с на ногу','2×45 с, потом 10 махов назад']},
     rope:  {n:'Канат', p:['rope'], how:'После борьбы, как обычно. Пока ладонь не зажила — с опорой ногами или пропусти.', cues:['Мозоли подпиливай раз в неделю'], t:['10 подъёмов','10','5','10','10 без ног']},
   };
@@ -560,13 +572,13 @@ const POSES = {
     {k:'mon_p', title:'Понедельник · площадка', where:'~45 мин. Если идёшь пешком, возьми рюкзак с 5–8 кг воды для подтягиваний и брусьев. Если в понедельник борьба — эту часть пропусти, сделай только «дома».', ex:['ctb','wpull','dips','fl','t2b'], warm:'Разминка 8 мин: кисти, плечи, лопаточные подтягивания 2×10, 5 лёгких подтягиваний.'},
     {k:'mon_h', title:'Понедельник · дома', where:'~30 мин. Гиря, резина, кирпичи. После борьбы или вечером.', ex:['hs','pistol','rdl','pike','lsit'], warm:'Разминка 5 мин: круги кистями и плечами, 10 приседаний, 10 лёгких отжиманий.'},
     {k:'sat', title:'Суббота · бег + площадка', where:'2,8 км до площадки, силовая, 5,7 км обратно лёгким темпом. Ноги после бега разогреты, руки нет: 3–4 минуты на плечи и кисти обязательно.', ex:['pullp','dipss','pplan','lsitb','t2b'], warm:'Разминка: кисти, плечи, 10 отжиманий, 10 лопаточных отжиманий.'},
-    {k:'grip', title:'Вторник и четверг · хват', where:'15 минут дома после танцев, или в любой вечер. Два раза в неделю. Это путь к банке: щипок, сжатие, пальцы.', ex:['pinch','towel','ftip','bandext','can'], warm:'Разминка: 20 сжатий кулака, круги кистями, потряси руками.'},
-    {k:'stretch', title:'Шпагат · после танцев и борьбы', where:'15–20 минут, 4 раза в неделю, всегда тёплым: сразу после танцев или борьбы, или дома после горячего душа. Шпагат — это недели, не дни: тянешь спокойно, без боли, прогресс меряй раз в 2 недели по расстоянию таза до пола.', ex:['couch','halfsplit','lunge','split','standsplit'], warm:''},
+    {k:'grip', title:'Вторник и четверг · хват', where:'15 минут дома после танцев. Нужны только книги, гиря и канцелярская резинка. Это путь к банке: щипок, сжатие, пальцы.', ex:['pinch','khold','ftip','bandext','can'], warm:'Разминка: 20 сжатий кулака, круги кистями, потряси руками.'},
+    {k:'stretch', title:'Шпагат · дома: пн, чт, вс', where:'20 минут дома, 3 раза в неделю: в понедельник после домашней силовой, в четверг после хвата, в воскресенье в любое время. Нужны коврик, два кирпича, стена или диван. Начинай с разминки, тянись спокойно, без боли.', ex:['splitwarm','couch','halfsplit','lunge','split','standsplit'], warm:''},
     {k:'thu_str', title:'Четверг · сила дома, по желанию', where:'25 минут после танцев. Пропускай, если не восстанавливаешься: борьба и танцы и так нагружают.', ex:['hs','pike','pistol','row'], warm:'Разминка: кисти, плечи, 10 приседаний.'},
     {k:'home_opt', title:'Дома по желанию', where:'В любой свободный вечер, 15 минут.', ex:['row'], warm:''},
   ];
-  const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h'], 2:['grip','stretch'], 3:['stretch'], 4:['grip','stretch','thu_str'], 5:['stretch'], 6:['sat'], 0:[]};
-  const OTHER_DAYS = {2:'Танцы, потом хват дома', 3:'Борьба', 4:'Танцы, потом хват дома', 5:'Борьба + канат', 0:'Отдых. Можно 15 минут растяжки после горячего душа.'};
+  const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h','stretch'], 2:['grip'], 3:[], 4:['grip','stretch','thu_str'], 5:[], 6:['sat'], 0:['stretch']};
+  const OTHER_DAYS = {2:'Танцы, потом хват дома', 3:'Борьба', 4:'Танцы, потом хват и шпагат дома', 5:'Борьба + канат', 0:'Отдых. Шпагат дома, 20 минут.'};
 
   // ---------- figures ----------
   function wrapText(t, max){ const w = t.split(' '), lines=[]; let cur=''; w.forEach(x => { if ((cur+' '+x).trim().length > max){ lines.push(cur.trim()); cur = x; } else cur += ' ' + x; }); if (cur.trim()) lines.push(cur.trim()); return lines; }
@@ -645,7 +657,7 @@ const POSES = {
     {k:'can', name:'Банка', sub:'кольцо / крышка пустой / полной', goal:'крышка с полной'},
   ];
 
-  const state = { log:{}, weeks:{}, tests:{}, settings:{}, kcal:{}, march:{}, free:{} };
+  const state = { log:{}, weeks:{}, tests:{}, settings:{}, kcal:{}, march:{}, free:{}, norms:{}, history:[] };
   const readOnly = false;
   const KEY = 'sushka-v1';
   const SEED = { log: { '2026-10-05': {date:'2026-10-05', kg:76.4, waist:82.5} } };
@@ -822,6 +834,16 @@ const POSES = {
     [{k:'sat_run', t:'Бег', w:2}, {k:'sat_p', t:'Турник', w:3}],
     [],
   ];
+  // From 9 Nov: split moved home (Mon, Thu, Sun); earlier weeks keep their old schedule
+  const SCHED2 = [
+    [{k:'mon_p', t:'Турник', w:3}, {k:'mon_h', t:'Дом', w:2}, {k:'mon_split', t:'Шпагат', w:1}],
+    [{k:'tue_dance', t:'Танцы', w:2}, {k:'tue_grip', t:'Хват', w:1}],
+    [{k:'wed_wr', t:'Борьба', w:2}],
+    [{k:'thu_dance', t:'Танцы', w:2}, {k:'thu_grip', t:'Хват', w:1}, {k:'thu_split', t:'Шпагат', w:1}, {k:'thu_str', t:'Сила', w:0}],
+    [{k:'fri_wr', t:'Борьба', w:2}],
+    [{k:'sat_run', t:'Бег', w:2}, {k:'sat_p', t:'Турник', w:3}],
+    [{k:'sun_split', t:'Шпагат', w:1}],
+  ];
   const MIGRATE = {tue:['tue_dance'], wed:['wed_wr'], thu:['thu_dance'], fri:['fri_wr'], sat:['sat_run','sat_p']};
   const DOW = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
   const DOWF = ['понедельник','вторник','среда','четверг','пятница','суббота','воскресенье'];
@@ -849,7 +871,7 @@ const POSES = {
     '2026-11-09': {note:'С сегодня — рекомпозиция: норма 2700, белок 140–160, один свободный приём в неделю. Замеров больше нет: обычная тренировка, прибавляй вес в подтягиваниях и брусьях.'},
   };
   const specialOf = i => SPECIAL[dayIso(i)] || null;
-  const schedFor = i => { const s = specialOf(i); return s && s.sched ? s.sched : SCHED[i%7]; };
+  const schedFor = i => { const s = specialOf(i); return s && s.sched ? s.sched : (i >= 35 ? SCHED2 : SCHED)[i%7]; };
   const WEIGHT_SKIP = [25, 30]; // 30 Oct – 4 Nov: water and glycogen swing after the march
   const skipW = j => j >= WEIGHT_SKIP[0] && j <= WEIGHT_SKIP[1];
 
@@ -963,13 +985,13 @@ const POSES = {
       });
     }
     // food: each logged day scores 1 (±150), 0.5 (±400), 0 (further off)
-    let days = 0, logged = 0, sum = 0, sc = 0, freeUsed = false; const bigOver = [];
+    let days = 0, logged = 0, sum = 0, sc = 0, freeUsed = false, normSum = 0; const bigOver = [];
     for (let i = P.a; i <= last; i++){
       const v = kcalOf(i);
       if (specialOf(i) && specialOf(i).kx) continue;
       if (!final && i === t && v == null) continue;
       days++; if (v == null) continue;
-      logged++;
+      logged++; normSum += state.norms[dayIso(i)] || KCAL;
       let ve = v;
       if (state.free[dayIso(i)] && !freeUsed && v > 0){ freeUsed = true; ve = Math.max(0, v - FREE_LIMIT); }
       sum += ve; const a = Math.abs(ve); sc += a <= 150 ? 1 : a <= 400 ? 0.5 : 0;
@@ -1015,12 +1037,12 @@ const POSES = {
       const str = missed.filter(m => /турник|дом/.test(m));
       notes.push('Пропущено: ' + missed.join(', ') + '.' + (str.length ? (recomp ? ' Силовые сейчас главное: именно они дают рельеф.' : ' Силовые на сушке пропускать нельзя: именно они держат мышцы.') : ''));
     }
-    return {k, P, final, len, dayN: last - P.a + 1, plan, got, missed, days, logged, sum, rate, parts, score, rec, notes};
+    return {k, P, final, len, dayN: last - P.a + 1, plan, got, missed, days, logged, sum, normAvg: logged ? normSum/logged : KCAL, rate, parts, score, rec, notes};
   }
   // Maintenance estimate from finished periods: intake + weight loss converted to kcal
   function tdeeEstimate(){
     const xs = [];
-    PERIODS.forEach((P, k) => { const S = summarize(k); if (S && S.final && S.rate != null && S.logged >= Math.ceil(S.days*0.7)) xs.push(KCAL + S.sum/S.logged - S.rate*1100); });
+    PERIODS.forEach((P, k) => { const S = summarize(k); if (S && S.final && S.rate != null && S.logged >= Math.ceil(S.days*0.7)) xs.push(S.normAvg + S.sum/S.logged - S.rate*1100); });
     if (!xs.length) return null;
     const use = xs.slice(-3);
     return {v: Math.round(use.reduce((a,b)=>a+b,0)/use.length/10)*10, n: use.length};
@@ -1056,7 +1078,7 @@ const POSES = {
   }
 
   const FREE_LIMIT = 800;
-  function setKcal(i, v, free){ const d = dayIso(i); if (v == null) delete state.kcal[d]; else state.kcal[d] = v; if (free) state.free[d] = true; else delete state.free[d]; renderSoft(); persist(); }
+  function setKcal(i, v, free){ const d = dayIso(i); if (v == null) { delete state.kcal[d]; delete state.norms[d]; } else { state.kcal[d] = v; state.norms[d] = KCAL; } if (free) state.free[d] = true; else delete state.free[d]; renderSoft(); persist(); }
   function kcalEditor(i){
     const v = kcalOf(i), isFree = !!state.free[dayIso(i)], mode = v == null ? null : isFree ? 'free' : v === 0 ? 'ok' : v > 0 ? 'over' : 'under';
     const wrap = el('div', {class:'kced'});
@@ -1130,7 +1152,7 @@ const POSES = {
       const st = stageOf(n), det = el('details');
       det.append(el('summary', {text:'Что уметь на этой неделе'}));
       const g = el('div', {class:'targets'});
-      ['ctb','wpull','dips','fl','hs','pistol','pike','lsit','pplan','t2b','pinch','towel','can','split','standsplit'].forEach(k => g.append(el('span', {class:'nm', text:EX[k].n}), el('span', {class:'tg', text:EX[k].t[st]})));
+      ['ctb','wpull','dips','fl','hs','pistol','pike','lsit','pplan','t2b','pinch','khold','can','split','standsplit'].forEach(k => g.append(el('span', {class:'nm', text:EX[k].n}), el('span', {class:'tg', text:EX[k].t[st]})));
       det.append(g); block.append(det);
       box.append(block);
     });
@@ -1187,7 +1209,17 @@ const POSES = {
     t.append(tb);
   }
 
-  function renderAll(){ renderStatus(); renderChart(); renderRecent(); renderWeeks(); renderTests(); }
+  function renderHistory(){
+    const ul = $('hist'); if (!ul) return; ul.textContent = '';
+    const hs = (state.history || []).slice().reverse();
+    if (!hs.length){ ul.append(el('li', {class:'muted', text:'Пока ничего не менялось.'})); return; }
+    hs.forEach(h => {
+      const d = new Date(h.at), when = d.getDate() + ' ' + MON[d.getMonth()] + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      const what = h.type === 'setting' ? h.label + ': ' + (h.from == null ? '—' : String(h.from).replace('.', ',')) + ' → ' + String(h.to).replace('.', ',') + (h.note ? ' (' + h.note + ')' : '') : h.text;
+      ul.append(el('li', {}, [el('span', {class:'hw', text:when}), el('span', {text:what})]));
+    });
+  }
+  function renderAll(){ renderHistory(); renderStatus(); renderChart(); renderRecent(); renderWeeks(); renderTests(); }
   function renderSoft(){ // keep focused test inputs untouched
     renderStatus(); renderChart(); renderRecent(); renderWeeks();
     const a = document.activeElement;
@@ -1226,22 +1258,30 @@ const POSES = {
     const kc = parseInt(state.settings && state.settings.kcal, 10);
     KCAL = isNaN(kc) ? 2700 : kc; $('in-kcal').value = KCAL;
   }
+  function logEvent(ev){ state.history = (state.history || []).concat([Object.assign({at: new Date().toISOString()}, ev)]); }
+  const SETTING_NAMES = {kcal:'Норма ккал', startKg:'Стартовый вес', goalKg:'Точка пересмотра'};
+  function setSetting(key, val){
+    const from = state.settings[key] == null ? null : state.settings[key];
+    if (from === val) return;
+    logEvent({type:'setting', key, label:SETTING_NAMES[key] || key, from, to:val});
+    state.settings = Object.assign({}, state.settings, {[key]: val});
+  }
   $('in-kcal').addEventListener('change', () => {
     const v = parseInt($('in-kcal').value, 10);
     if (isNaN(v) || v < 1200 || v > 5000) { applySettings(); return; }
-    state.settings = Object.assign({}, state.settings, {kcal: Math.round(v/10)*10});
+    setSetting('kcal', Math.round(v/10)*10);
     applySettings(); renderAll(); persist();
   });
   $('in-goal').addEventListener('change', () => {
     const v = parseFloat(String($('in-goal').value).replace(',', '.'));
     if (isNaN(v) || v < 40 || v > 120) { applySettings(); return; }
-    state.settings = Object.assign({}, state.settings, {goalKg: Math.round(v*10)/10});
+    setSetting('goalKg', Math.round(v*10)/10);
     applySettings(); renderAll(); persist();
   });
   $('in-start').addEventListener('change', () => {
     const v = parseFloat(String($('in-start').value).replace(',', '.'));
     if (isNaN(v) || v < 40 || v > 120) { applySettings(); return; }
-    state.settings = Object.assign({}, state.settings, {startKg: Math.round(v*10)/10});
+    setSetting('startKg', Math.round(v*10)/10);
     applySettings(); renderAll(); persist();
   });
 
@@ -1271,6 +1311,9 @@ const POSES = {
         state.kcal = Object.assign({}, state.kcal, p.kcal || {});
         state.march = Object.assign({}, state.march, p.march || {});
         state.free = Object.assign({}, state.free, p.free || {});
+        state.norms = Object.assign({}, state.norms, p.norms || {});
+        const seen = new Set(state.history.map(h => h.at + h.type + (h.key || '')));
+        state.history = state.history.concat((p.history || []).filter(h => !seen.has(h.at + h.type + (h.key || '')))).sort((x, y) => x.at < y.at ? -1 : 1);
         migrateWeeks();
         applySettings(); renderAll(); persist();
         bnote('Восстановлено: ' + n + ' взвеш. Новые записи добавлены к текущим.');
@@ -1291,16 +1334,16 @@ const POSES = {
     if (!date || isNaN(k)) { note('Укажи дату и вес.', true); return; }
     const prev = state.log[date];
     const waist = wRaw ? parseFloat(wRaw) : (prev && prev.waist) || null;
-    saveLog(date, {date, kg: Math.round(k*10)/10, waist: waist ? Math.round(waist*10)/10 : null});
+    saveLog(date, {date, kg: Math.round(k*10)/10, waist: waist ? Math.round(waist*10)/10 : null, at: new Date().toISOString()});
     note('Записано: ' + fmtD(parse(date)) + ', ' + kg(k) + ' кг.');
     $('in-kg').value = ''; $('in-waist').value = '';
   });
 
   // ---------- workout timer ----------
   // Holds and stretches run on their own; rep sets wait for one tap anywhere, then rest counts down.
-  const TIMED = new Set(['hs','fl','lsit','lsitb','couch','halfsplit','lunge','split','standsplit','pinch']);
-  const SIDE = {pistol:'leg', rdl:'leg', couch:'leg', halfsplit:'leg', lunge:'leg', split:'leg', standsplit:'leg', row:'arm', pinch:'arm'};
-  const REST = {ctb:150, wpull:150, dips:150, pullp:150, dipss:150, pistol:120, rdl:90, pike:90, pplan:90, t2b:90, row:75, bandext:45,
+  const TIMED = new Set(['hs','fl','lsit','lsitb','couch','halfsplit','lunge','split','standsplit','pinch','khold','splitwarm']);
+  const SIDE = {khold:'arm', pistol:'leg', rdl:'leg', couch:'leg', halfsplit:'leg', lunge:'leg', split:'leg', standsplit:'leg', row:'arm', pinch:'arm'};
+  const REST = {khold:30, splitwarm:5, ctb:150, wpull:150, dips:150, pullp:150, dipss:150, pistol:120, rdl:90, pike:90, pplan:90, t2b:90, row:75, bandext:45,
     hs:60, fl:90, lsit:60, lsitb:60, pinch:60, towel:90, ftip:60, couch:15, halfsplit:15, lunge:15, split:20, standsplit:15};
   const STRETCH = new Set(['couch','halfsplit','lunge','split','standsplit']);
   function timerPlan(k, week){
@@ -1510,12 +1553,31 @@ const POSES = {
   let loaded = false;
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; state.kcal = p.kcal || {}; state.march = p.march || {}; state.free = p.free || {}; loaded = true; }
+    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; state.kcal = p.kcal || {}; state.march = p.march || {}; state.free = p.free || {}; state.norms = p.norms || {}; state.history = p.history || []; loaded = true; }
   } catch(e){}
   if (!loaded){ state.log = Object.assign({}, SEED.log); persist(); }
   function migrateWeeks(){ let ch = false; Object.values(state.weeks).forEach(w => { if (!w || !w.d) return; Object.entries(MIGRATE).forEach(([o, ns]) => { if (w.d[o]) { ns.forEach(n => w.d[n] = true); delete w.d[o]; ch = true; } }); }); return ch; }
   if (migrateWeeks()) persist();
-  if (!state.settings.recompSet){ state.settings = Object.assign({}, state.settings, {recompSet: true, kcal: 2700}); persist(); }
+  if (!state.settings.recompSet){
+    const from = state.settings.kcal == null ? null : state.settings.kcal;
+    logEvent({type:'setting', key:'kcal', label:'Норма ккал', from, to:2700, note:'переход на рекомпозицию'});
+    state.settings = Object.assign({}, state.settings, {recompSet: true, kcal: 2700}); persist();
+  }
+  if (!state.settings.histSeeded){
+    // Events before the history existed, reconstructed so analytics has the full timeline
+    const past = [
+      {at:'2026-10-05T06:00:00.000Z', type:'plan', text:'Старт сушки: норма 2550, коридор −0,2…−0,35 кг в неделю.'},
+      {at:'2026-10-14T06:00:00.000Z', type:'plan', text:'Начат учёт калорий и сводки по неделям.'},
+      {at:'2026-10-29T06:00:00.000Z', type:'plan', text:'Марш-бросок 30 окт – 1 ноя: калории 29 окт – 2 ноя и вес 30 окт – 4 ноя не учитываются.'},
+    ];
+    if (!state.history.some(h => h.key === 'kcal')) past.push({at:'2026-11-09T00:20:00.000Z', type:'setting', key:'kcal', label:'Норма ккал', from:2450, to:2700, note:'переход на рекомпозицию; до этого 2550 → 2450, дата неизвестна'});
+    state.history = past.concat(state.history).sort((x, y) => x.at < y.at ? -1 : 1);
+    state.settings = Object.assign({}, state.settings, {histSeeded: true}); persist();
+  }
+  if (!state.settings.plan2Set){
+    logEvent({type:'plan', text:'Чек-поинты убраны. Шпагат перенесён домой: пн, чт, вс. Хват без самодельного блока: книги и гиря.'});
+    state.settings = Object.assign({}, state.settings, {plan2Set: true}); persist();
+  }
   applySettings();
   renderAll(); renderTrain(); renderMarch();
   (() => { let p = 'today'; try { p = localStorage.getItem(KEY+'-tab') || 'today'; } catch(e){} if (location.hash.length > 1) p = location.hash.slice(1); showPage(p); })();
