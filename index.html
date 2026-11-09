@@ -339,10 +339,9 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     </form>
     <div class="chartbox"><svg class="chart" id="chart" viewBox="0 0 720 270" role="img" aria-label="График веса по дням с коридором цели"></svg></div>
     <div class="legend">
-      <span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>коридор −0,2…−0,35 кг/нед</span>
+      <span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>коридор: сушка, с 9 ноября «держим вес» ±0,3</span>
       <span><i style="background:var(--ink);height:3px;vertical-align:3px"></i>среднее за 7 дней</span>
       <span><i style="background:var(--muted);width:8px;height:8px;border-radius:50%"></i>взвешивания</span>
-      <span><i style="border-top:2px dashed var(--mark);height:0;vertical-align:4px"></i>точка пересмотра</span>
     </div>
     <div class="recent" id="recent"></div>
     <div>
@@ -377,13 +376,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   </section>
 
   <!-- ===== Замеры ===== -->
-  <section class="page" id="p-tests" role="tabpanel">
-    <div class="head">
-      <h2>Чек-поинты</h2>
-      <p class="lede">Замеры делай свежим: в субботу на площадке до обратной пробежки или в понедельник. Можно писать текстом: «с резиной», «стул 45 см».</p>
-    </div>
-    <div class="tablebox"><table id="tests"></table></div>
-  </section>
+
 
   <!-- ===== Ещё ===== -->
   <section class="page" id="p-march" role="tabpanel">
@@ -405,7 +398,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
       <p><b>Ночь.</b> Перед сном сало и колбаса, тёплый чай, сходи в туалет, ложись в сухом и в шапке. Бутылку с кипятком — в спальник.</p>
       <p><b>Ноги.</b> Начало натирать — сразу пластырь, не жди мозоли. На больших привалах меняй носки, мокрые суши у костра.</p>
       <p><b>Переохлаждение.</b> Сильная дрожь, неловкие пальцы, заплетается речь, становится всё равно — стоп: сухая одежда, горячее питьё, еда. Следи и за теми, кто рядом.</p>
-      <p><b>После.</b> 1–2 ноября ешь на поддержку, около 2900 ккал, белок 140+. Пн — отдых, вт — лёгкие танцы, со среды обычный режим. Чек-поинт 1 — сб 7 и пн 9 ноября.</p>
+      <p><b>После.</b> 1–2 ноября ешь на поддержку, около 2900 ккал, белок 140+. Пн — отдых, вт — лёгкие танцы, со среды обычный режим.</p>
     </div>
   </section>
 
@@ -413,15 +406,15 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     <button type="button" class="tm-open" data-go="march"><span class="tm-ico">▶</span><span>План марш-броска</span><small>30 окт – 1 ноя</small></button>
     <div class="head">
       <h2>Когда менять калории</h2>
-      <p class="lede">Смотри на средний вес за неделю, не на одно взвешивание. Белок 130–150 г, жиры 65–75 г, остальное углеводы — больше всего до и после борьбы.</p>
+      <p class="lede">Сейчас рекомпозиция: норма 2700, белок 140–160 г, жиры 65–75 г, остальное углеводы — больше всего до и после борьбы. Смотри на средний вес за неделю, не на одно взвешивание.</p>
     </div>
     <div class="rules">
-      <div><span class="if">−0,2…−0,35 кг/нед</span><span class="then">Всё по плану, ничего не меняй.</span></div>
-      <div><span class="if">быстрее −0,5 кг/нед</span><span class="then">Добавь 150–200 ккал, лучше углеводами.</span></div>
-      <div><span class="if">вес стоит 2–3 недели</span><span class="then">Убери 150 ккал (до 2350–2400) или добавь 2–3 тысячи шагов в день.</span></div>
-      <div><span class="if">после читмила</span><span class="then">Вес стоит 3–5 дней из-за воды и гликогена. Не трогай калории, жди.</span></div>
+      <div><span class="if">вес ±0,3 от точки отсчёта</span><span class="then">Всё правильно. Растим силовые.</span></div>
+      <div><span class="if">+0,5 кг две недели и талия +1 см</span><span class="then">Норма −150, то есть 2550.</span></div>
+      <div><span class="if">вес падает быстрее 0,3 в неделю</span><span class="then">Добавь 100–150 ккал.</span></div>
+      <div><span class="if">свободный приём</span><span class="then">Раз в неделю до +800, лучше в субботу после пробежки. Отмечай кнопкой «Свободный».</span></div>
+      <div><span class="if">после переедания</span><span class="then">Вес 3–5 дней выше из-за воды. Не компенсируй голодом, просто возвращайся к норме.</span></div>
       <div><span class="if">сила падает 2 недели</span><span class="then">Добавь 150–200 ккал и проверь сон — нужно 7,5–9 часов.</span></div>
-      <div><span class="if">средний вес ≈ цель</span><span class="then">Посмотри в зеркало и на талию. Если доволен — выходи на поддержку.</span></div>
     </div>
     <div class="head">
       <h2>Как считается итог недели</h2>
@@ -429,9 +422,10 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     <div class="how-sum">
       <p><b>Тренировки, 40%.</b> Доля сделанных занятий с весами: турник 3, дом, борьба, танцы, бег по 2, хват и шпагат по 1. Пропуск силовой бьёт сильнее, чем пропуск растяжки.</p>
       <p><b>Питание, 30%.</b> Каждый отмеченный день: в пределах ±150 ккал от нормы — полный балл, ±400 — половина, дальше — ноль. Недобор считается так же, как перебор. Сумма за неделю пересчитывается в граммы: 7700 ккал ≈ 1 кг жира.</p>
-      <p><b>Вес, 30%.</b> Средний вес за период против 7 дней до него, в пересчёте на неделю. −150…−500 г в неделю — полный балл. Стоит или растёт — меньше. Быстрее −500 г — тоже минус: риск потерять силу.</p>
+      <p><b>Вес, 30%.</b> Средний вес за период против 7 дней до него, в пересчёте на неделю. −150…−500 г в неделю — полный балл. Стоит или растёт — меньше. Быстрее −500 г — тоже минус: риск потерять силу. С 9 ноября, на рекомпозиции, полный балл — если вес держится: от −300 до +150 г в неделю.</p>
+      <p><b>Свободный приём</b> — один в неделю, до +800 ккал, в оценку питания не идёт. Всё, что сверх, считается перебором.</p>
       <p><b>Совет</b> строится из сочетания. Вес стоит, а были переборы — убери переборы, норму не трогай. Вес стоит при честной норме два периода подряд — снижай норму на 150. Слишком быстро — проверь, не недоедаешь ли.</p>
-      <p><b>Твоя поддержка</b> считается после первых сводок: что съел + сколько ушло жира. Это показывает, насколько 2550 реально дефицит.</p>
+      <p><b>Твоя поддержка</b> считается после первых сводок: что съел + сколько ушло жира. Это показывает, где на самом деле твоя поддержка.</p>
       <p><b>Расписание сводок.</b> Калории считаются с 14 октября. Первая сводка — 14–20 окт (в среду 21-го), вторая короткая — 21–25 окт (в понедельник 26-го), дальше каждую неделю пн–вс.</p>
     </div>
     <div class="head">
@@ -461,7 +455,6 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   <button class="tab" role="tab" data-page="today" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 5-7 4 5"/><path d="M3 21h18"/></svg>Сегодня</button>
   <button class="tab" role="tab" data-page="weeks" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Недели</button>
   <button class="tab" role="tab" data-page="train" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 10v4M20 10v4M7 8v8M17 8v8M7 12h10"/></svg>Тренировки</button>
-  <button class="tab" role="tab" data-page="tests" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-5"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg>Замеры</button>
   <button class="tab" role="tab" data-page="more" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>Ещё</button>
 </nav>
 
@@ -483,15 +476,15 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
     {ph:'Слив воды', note:'После читмилов вернуться на 74,0 к воскресенью. Без читмилов, калории не трогай. Стартовые замеры.'},
     {ph:'Втягивание', note:'Подбери варианты упражнений, где остаётся запас 1–2 повтора.'},
     {ph:'Втягивание', note:'Первые прибавки: повтор сверху или вариант сложнее.'},
-    {ph:'Марш', cp:true, note:'Пн — греко-римская, пт — отдых, 30 окт – 1 ноя — марш-бросок 110 км. Чек-поинт 1 перенесён на 7 ноября.'},
-    {ph:'Чек-поинт 1', cp:true, note:'Пн 2 — отдых, вт — лёгкие танцы. Сб 7 ноя — замеры на площадке, пн 9 ноя — дома. Вес для чек-поинта — среднее за 26–29 окт.'},
-    {ph:'Прогресс', note:'Взрывные подтягивания до груди — цель 5×5.'},
-    {ph:'Разгрузка', dl:true, note:'Те же упражнения, подходов вдвое меньше. Калории те же.'},
-    {ph:'Чек-поинт 2', cp:true, note:'Пн 23 ноя: замеры свежим после разгрузки. Решаешь: продолжать сушку или выходить на поддержку.'},
-    {ph:'Прогресс 2', note:'Попытки выхода силой с резиной в конце понедельника.'},
-    {ph:'Прогресс 2', note:'Пистолет: опора ниже.'},
-    {ph:'Прогресс 2', note:'Последняя тяжёлая неделя перед финалом.'},
-    {ph:'Финал', cp:true, note:'Сб 26 дек: финальные замеры. Потом поддержка на праздники: +250–300 ккал.'},
+    {ph:'Марш', cp:true, note:'Пн — греко-римская, пт — отдых, 30 окт – 1 ноя — марш-бросок 110 км.'},
+    {ph:'Восстановление', note:'Пн 2 — отдых, вт — лёгкие танцы, со среды обычный режим.'},
+    {ph:'Рекомпозиция', note:'Норма 2700, белок 140–160, один свободный приём. Средний вес ср–вс — отправная точка. Силовые — с прибавкой веса.'},
+    {ph:'Рекомпозиция', note:'Подтягивания и брусья — с рюкзаком или гирей. Чт — короткая силовая дома, по желанию.'},
+    {ph:'Решение', cp:true, note:'Смотрим вес, талию и рабочие подходы: продолжаем рекомпозицию или аккуратно возвращаемся к сушке.'},
+    {ph:'Дальше по решению', note:'Попытки выхода силой с резиной в конце понедельника.'},
+    {ph:'Дальше по решению', note:'Пистолет: опора ниже.'},
+    {ph:'Разгрузка', dl:true, note:'Те же упражнения, подходов вдвое меньше.'},
+    {ph:'Итог', note:'Сравниваем с началом: вес, талия, рабочие подходы. Праздники — на поддержке.'},
   ];
 // Canvas 200x140. Side view. Coordinates: h=head, n=neck/shoulder, hp=hip,
 // arms: [[elbow, hand], ...] near arm first; legs: [[knee, foot], ...] near leg first.
@@ -532,8 +525,8 @@ const POSES = {
   rope:{h:[100,34],n:[100,48],hp:[102,88],arms:[[[90,30],[100,10]],[[112,62],[100,50]]],legs:[[[88,108],[100,118]],[[112,108],[100,116]]],props:[{t:'rope',x:100}],note:{text:'стопами зажимаешь канат',x:150,y:112,ax:104,ay:116}},
 };
   // Stage index per week: 0 = w1-3, 1 = w4-6, 2 = deload w7, 3 = w8-9, 4 = w10-12
-  const stageOf = w => w <= 3 ? 0 : w <= 6 ? 1 : w === 7 ? 2 : w <= 9 ? 3 : 4;
-  const STAGE_NAME = ['Втягивание, нед 1–3', 'Прогресс, нед 4–6', 'Разгрузка, нед 7', 'Прогресс 2, нед 8–9', 'Финал, нед 10–12'];
+  const stageOf = w => w <= 3 ? 0 : w <= 7 ? 1 : w === 11 ? 2 : w <= 10 ? 3 : 4;
+  const STAGE_NAME = ['Втягивание, нед 1–3', 'Прогресс, нед 4–7', 'Разгрузка, нед 11', 'Прогресс 2, нед 8–10', 'Пик, нед 12'];
   // Each exercise: name, poses (1-2), how, cues, targets[5] (deload computed when null)
   const EX = {
     ctb:   {n:'Взрывные подтягивания до груди', p:['pull_bottom','ctb_top'], how:'Из виса <b>рывком</b> тяни так, чтобы перекладина дошла до груди, а не до подбородка. Вниз — спокойно, с полным выпрямлением рук.', cues:['Сначала лопатки вниз, потом локти к бокам','Таз чуть вперёд, тело не раскачивай','Если не достаёшь до груди — тяни максимально быстро до подбородка'], t:['5×3 до подбородка быстро','5×4, перекладина у ключиц','3×3','5×5 у груди','попытки выхода силой с резиной 5×2']},
@@ -569,9 +562,10 @@ const POSES = {
     {k:'sat', title:'Суббота · бег + площадка', where:'2,8 км до площадки, силовая, 5,7 км обратно лёгким темпом. Ноги после бега разогреты, руки нет: 3–4 минуты на плечи и кисти обязательно.', ex:['pullp','dipss','pplan','lsitb','t2b'], warm:'Разминка: кисти, плечи, 10 отжиманий, 10 лопаточных отжиманий.'},
     {k:'grip', title:'Вторник и четверг · хват', where:'15 минут дома после танцев, или в любой вечер. Два раза в неделю. Это путь к банке: щипок, сжатие, пальцы.', ex:['pinch','towel','ftip','bandext','can'], warm:'Разминка: 20 сжатий кулака, круги кистями, потряси руками.'},
     {k:'stretch', title:'Шпагат · после танцев и борьбы', where:'15–20 минут, 4 раза в неделю, всегда тёплым: сразу после танцев или борьбы, или дома после горячего душа. Шпагат — это недели, не дни: тянешь спокойно, без боли, прогресс меряй раз в 2 недели по расстоянию таза до пола.', ex:['couch','halfsplit','lunge','split','standsplit'], warm:''},
+    {k:'thu_str', title:'Четверг · сила дома, по желанию', where:'25 минут после танцев. Пропускай, если не восстанавливаешься: борьба и танцы и так нагружают.', ex:['hs','pike','pistol','row'], warm:'Разминка: кисти, плечи, 10 приседаний.'},
     {k:'home_opt', title:'Дома по желанию', where:'В любой свободный вечер, 15 минут.', ex:['row'], warm:''},
   ];
-  const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h'], 2:['grip','stretch'], 3:['stretch'], 4:['grip','stretch'], 5:['stretch'], 6:['sat'], 0:[]};
+  const DAY_OF_WEEK_PLAN = {1:['mon_p','mon_h'], 2:['grip','stretch'], 3:['stretch'], 4:['grip','stretch','thu_str'], 5:['stretch'], 6:['sat'], 0:[]};
   const OTHER_DAYS = {2:'Танцы, потом хват дома', 3:'Борьба', 4:'Танцы, потом хват дома', 5:'Борьба + канат', 0:'Отдых. Можно 15 минут растяжки после горячего душа.'};
 
   // ---------- figures ----------
@@ -651,7 +645,7 @@ const POSES = {
     {k:'can', name:'Банка', sub:'кольцо / крышка пустой / полной', goal:'крышка с полной'},
   ];
 
-  const state = { log:{}, weeks:{}, tests:{}, settings:{}, kcal:{}, march:{} };
+  const state = { log:{}, weeks:{}, tests:{}, settings:{}, kcal:{}, march:{}, free:{} };
   const readOnly = false;
   const KEY = 'sushka-v1';
   const SEED = { log: { '2026-10-05': {date:'2026-10-05', kg:76.4, waist:82.5} } };
@@ -672,7 +666,10 @@ const POSES = {
   const weekOf = s => Math.floor(idx(s)/7) + 1;
   const weekAvg = w => { const xs = entries().filter(e => weekOf(e.date) === w && !skipW(idx(e.date))).map(e => e.kg); return xs.length ? xs.reduce((a,b)=>a+b,0)/xs.length : null; };
   // week 1 = water drop back to START; the corridor starts from START at the end of week 1
-  const band = w => { const k = Math.max(0, w-1); return [START_KG - 0.35*k, START_KG - 0.2*k]; };
+  const RECOMP_FROM = 35; // 9 Nov: recomposition instead of a cut
+  const cutBand = w => { const k = Math.max(0, w-1); return [START_KG - 0.35*k, START_KG - 0.2*k]; };
+  function recompBase(){ const r = avgRange(37, 41); return r && r.n >= 2 ? r.v : null; } // average of Wed 11 – Sun 15 Nov
+  const band = w => { if (w >= 6){ const b = recompBase(); return b == null ? [null, null] : [b - 0.3, b + 0.3]; } return cutBand(w); };
   const todayIso = iso(new Date());
   const curWeek = Math.min(12, Math.max(1, Math.floor((new Date() - START)/DAY/7) + 1));
 
@@ -700,14 +697,23 @@ const POSES = {
       $('st-delta').textContent = '—';
     }
     const [lo, hi] = band(curWeek);
-    $('st-band').textContent = curWeek === 1 ? '≈ ' + kg(START_KG) : kg(lo) + '–' + kg(hi);
-    $('st-band-s').textContent = curWeek === 1 ? 'вернуться к воскресенью' : 'к концу ' + curWeek + '-й недели';
+    if (curWeek >= 6){ $('st-band').textContent = lo == null ? '—' : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = lo == null ? 'точка отсчёта: ср–вс' : 'держим вес'; }
+    else { $('st-band').textContent = curWeek === 1 ? '≈ ' + kg(START_KG) : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = curWeek === 1 ? 'вернуться к воскресенью' : 'к концу ' + curWeek + '-й недели'; }
     renderVerdict(); renderToday(); renderTodayLog(); renderSums(); renderMarchBanner();
   }
   function renderVerdict(){
     const v = $('verdict');
     const ti = idx(todayIso);
     if (skipW(ti)){ v.innerHTML = '<b>Марш:</b> вес с 30 октября по 4 ноября не учитывается — вода и гликоген сильно его качают. Взвешивайся как обычно, выводы вернутся с 5 ноября.'; return; }
+    if (curWeek >= 6){
+      const base = recompBase(), last7 = avgRange(ti - 6, ti);
+      if (base == null || !last7) { v.innerHTML = '<b>Рекомпозиция:</b> норма ' + KCAL + ', белок 140–160 г. Точка отсчёта веса — средний со среды 11 по воскресенье 15 ноября: взвешивайся утром.'; return; }
+      const d = last7.v - base;
+      v.innerHTML = Math.abs(d) <= 0.3 ? '<b>Вес держится</b> (' + (d >= 0 ? '+' : '−') + kg(Math.abs(d)) + ' от точки отсчёта) — так и надо. Растим силовые.'
+        : d > 0 ? '<b>Вес выше точки отсчёта</b> на ' + kg(d) + ' кг. Если так две недели и талия растёт — норма 2550. После переедания сначала подожди 3–5 дней.'
+        : '<b>Вес ниже точки отсчёта</b> на ' + kg(-d) + ' кг — для рекомпозиции быстро. Добавь 100–150 ккал.';
+      return;
+    }
     const list = entries().filter(e => !skipW(idx(e.date))); if (list.length < 2){ v.innerHTML = '<b>Пока мало данных.</b> Взвешивайся 3–4 раза в неделю утром натощак, вывод появится сам.'; return; }
     const last = list[list.length-1], li = idx(last.date);
     const cur = list.filter(e => idx(e.date) > li-7).map(e=>e.kg), prev = list.filter(e => idx(e.date) > li-14 && idx(e.date) <= li-7).map(e=>e.kg);
@@ -762,13 +768,14 @@ const POSES = {
     }
     s += `<text x="${L}" y="${T-8}">кг</text><text x="${W-R}" y="${T-8}" text-anchor="end">неделя</text>`;
     // band
-    const [lo12, hi12] = band(12);
-    s += `<polygon points="${X(7)},${Y(START_KG)} ${X(84)},${Y(hi12)} ${X(84)},${Y(lo12)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`;
+    const [lo5, hi5] = cutBand(6);
+    s += `<polygon points="${X(7)},${Y(START_KG)} ${X(35)},${Y(hi5)} ${X(35)},${Y(lo5)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`;
+    const rb = recompBase();
+    if (rb != null) s += `<rect x="${X(35)}" y="${Y(rb + 0.3)}" width="${X(84) - X(35)}" height="${Y(rb - 0.3) - Y(rb + 0.3)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/><text x="${X(83)}" y="${Y(rb + 0.3) - 4}" text-anchor="end" style="fill:var(--accent)">держим</text>`;
     s += `<line x1="${X(0)}" x2="${X(7)}" y1="${Y(START_KG)}" y2="${Y(START_KG)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="3 3"/>`;
     // review line
-    s += `<line x1="${L}" x2="${W-R}" y1="${Y(GOAL_KG)}" y2="${Y(GOAL_KG)}" stroke="var(--mark)" stroke-width="1.5" stroke-dasharray="6 5"/>`;
     // checkpoints
-    [[0,'старт'],[33,'Ч1'],[49,'Ч2'],[82,'финал']].forEach(([i,t]) => {
+    [[0,'старт'],[35,'рекомп.']].forEach(([i,t]) => {
       s += `<line x1="${X(i)}" x2="${X(i)}" y1="${T}" y2="${H-B}" stroke="var(--mark)" stroke-width="1" stroke-opacity=".6"/>`;
       s += `<text x="${X(i)+(i>70?-4:4)}" y="${T+11}" text-anchor="${i>70?'end':'start'}" style="fill:var(--mark)">${t}</text>`;
     });
@@ -810,7 +817,7 @@ const POSES = {
     [{k:'mon_p', t:'Турник', w:3}, {k:'mon_h', t:'Дом', w:2}],
     [{k:'tue_dance', t:'Танцы', w:2}, {k:'tue_grip', t:'Хват', w:1}, {k:'tue_split', t:'Шпагат', w:1}],
     [{k:'wed_wr', t:'Борьба', w:2}, {k:'wed_split', t:'Шпагат', w:1}],
-    [{k:'thu_dance', t:'Танцы', w:2}, {k:'thu_grip', t:'Хват', w:1}, {k:'thu_split', t:'Шпагат', w:1}],
+    [{k:'thu_dance', t:'Танцы', w:2}, {k:'thu_grip', t:'Хват', w:1}, {k:'thu_split', t:'Шпагат', w:1}, {k:'thu_str', t:'Сила', w:0}],
     [{k:'fri_wr', t:'Борьба', w:2}, {k:'fri_split', t:'Шпагат', w:1}],
     [{k:'sat_run', t:'Бег', w:2}, {k:'sat_p', t:'Турник', w:3}],
     [],
@@ -839,8 +846,7 @@ const POSES = {
     '2026-11-01': {sched:[{k:'march2', t:'Марш', w:6}], kx:'марш', note:'Марш, день 2. После финиша ешь на поддержку, около 2900 ккал.', plan:[]},
     '2026-11-02': {sched:[], kx:'восст', note:'Отдых после марша. Ешь около 2900 ккал, белок 140+. На вес не смотри до четверга.', plan:[]},
     '2026-11-03': {sched:[{k:'tue_dance', t:'Танцы', w:2}], note:'Лёгкие танцы. Хват и шпагат по самочувствию.', plan:[]},
-    '2026-11-07': {note:'Чек-поинт 1, площадка: взрывные до груди, выход силой, фронт-левер, уголок, потом максимум подтягиваний, брусьев и носков к перекладине. Отдых 3–5 минут. Результаты — во вкладку «Замеры». Обратно бегом спокойно.', plan:[]},
-    '2026-11-09': {note:'Чек-поинт 1, дома — вместо домашней тренировки: стойка у стены, пистолет, отжимания на максимум, щипок, банка. Площадка сегодня по обычному плану.', plan:['mon_p']},
+    '2026-11-09': {note:'С сегодня — рекомпозиция: норма 2700, белок 140–160, один свободный приём в неделю. Замеров больше нет: обычная тренировка, прибавляй вес в подтягиваниях и брусьях.'},
   };
   const specialOf = i => SPECIAL[dayIso(i)] || null;
   const schedFor = i => { const s = specialOf(i); return s && s.sched ? s.sched : SCHED[i%7]; };
@@ -936,6 +942,11 @@ const POSES = {
     if (r > 0) return Math.max(0, 0.5 - r);
     return Math.max(0.4, 1 - (-r - 0.5)*1.5);
   }
+  function scoreHold(r){ // recomposition: weight should hold
+    if (r >= -0.3 && r <= 0.15) return 1;
+    if (r > 0.15) return Math.max(0, 1 - (r - 0.15)*2);
+    return Math.max(0.5, 1 - (-r - 0.3)*1.5);
+  }
   function periodLabel(P){ return fmtD(addDays(START, P.a)) + ' – ' + fmtD(addDays(START, P.b)); }
 
   function summarize(k){
@@ -952,13 +963,16 @@ const POSES = {
       });
     }
     // food: each logged day scores 1 (±150), 0.5 (±400), 0 (further off)
-    let days = 0, logged = 0, sum = 0, sc = 0; const bigOver = [];
+    let days = 0, logged = 0, sum = 0, sc = 0, freeUsed = false; const bigOver = [];
     for (let i = P.a; i <= last; i++){
       const v = kcalOf(i);
       if (specialOf(i) && specialOf(i).kx) continue;
       if (!final && i === t && v == null) continue;
       days++; if (v == null) continue;
-      logged++; sum += v; const a = Math.abs(v); sc += a <= 150 ? 1 : a <= 400 ? 0.5 : 0;
+      logged++;
+      let ve = v;
+      if (state.free[dayIso(i)] && !freeUsed && v > 0){ freeUsed = true; ve = Math.max(0, v - FREE_LIMIT); }
+      sum += ve; const a = Math.abs(ve); sc += a <= 150 ? 1 : a <= 400 ? 0.5 : 0;
       if (v >= 700) bigOver.push(i);
     }
     // weight: average of this period vs the 7 days before it, as kg per week
@@ -968,14 +982,23 @@ const POSES = {
     const parts = [
       {k:'train', w:0.4, v: plan ? got/plan : null},
       {k:'food',  w:0.3, v: logged ? sc/logged : null},
-      {k:'weight',w:0.3, v: rate == null ? null : scoreRate(rate)},
+      {k:'weight',w:0.3, v: rate == null ? null : (P.a >= RECOMP_FROM ? scoreHold(rate) : scoreRate(rate))},
     ];
     const have = parts.filter(p => p.v != null);
     const score = have.length >= 2 ? Math.round(100 * have.reduce((s,p) => s + p.w*p.v, 0) / have.reduce((s,p) => s + p.w, 0)) : null;
     // recommendation
     let rec = '';
     const prevS = k > 0 && final ? summarize(k-1) : null;
+    const recomp = P.a >= RECOMP_FROM;
     if (rate == null) rec = 'Мало взвешиваний, чтобы оценить вес: нужно 3–4 утренних за неделю.';
+    else if (recomp){
+      if (rate >= -0.3 && rate <= 0.15) rec = 'Вес держится — как и нужно при рекомпозиции. Ничего не меняй, растим силовые.';
+      else if (rate > 0.15){
+        if (sum >= 1000) rec = 'Вес растёт из-за переборов: ' + signed(sum) + ' ккал сверх нормы и свободного приёма. Норму не трогай, убери лишние переборы.';
+        else if (prevS && prevS.rate != null && prevS.rate > 0.15) rec = 'Вес растёт второй период подряд. Если и талия прибавила — снизь норму до ' + (KCAL - 150) + '.';
+        else rec = 'Вес чуть вырос. Смотри на талию: если она не растёт, это вода или мышцы. Подожди неделю.';
+      } else rec = (sum <= -1000 ? 'Вес уходит, потому что недоедал. ' : 'Вес уходит быстрее, чем нужно. ') + 'Для рекомпозиции добавь 100–150 ккал.';
+    }
     else if (rate <= -0.15 && rate >= -0.5) rec = 'Темп в плане. Ничего не меняй.';
     else if (rate > -0.15){
       if (sum >= 1000) rec = 'Вес стоит из-за переборов: ' + signed(sum) + ' ккал ≈ ' + signed(sum/7700*1000).replace(/\D+$/,'') + ' г жира. Норму не снижай, убери переборы.';
@@ -987,10 +1010,10 @@ const POSES = {
       else rec = 'Слишком быстро при честной норме. Добавь 150 ккал, норма ' + (KCAL + 150) + '.';
     }
     const notes = [];
-    if (bigOver.some(i => i >= last - 1)) notes.push('Перебор в последние дни: вес в конце периода завышен водой, реальный результат лучше.');
+    if (bigOver.some(i => i >= last - 1)) notes.push('Плотно ел в последние дни: вес в конце периода завышен водой, реальный результат лучше.');
     if (plan && got/plan < 0.75 && missed.length){
       const str = missed.filter(m => /турник|дом/.test(m));
-      notes.push('Пропущено: ' + missed.join(', ') + '.' + (str.length ? ' Силовые на сушке пропускать нельзя: именно они держат мышцы.' : ''));
+      notes.push('Пропущено: ' + missed.join(', ') + '.' + (str.length ? (recomp ? ' Силовые сейчас главное: именно они дают рельеф.' : ' Силовые на сушке пропускать нельзя: именно они держат мышцы.') : ''));
     }
     return {k, P, final, len, dayN: last - P.a + 1, plan, got, missed, days, logged, sum, rate, parts, score, rec, notes};
   }
@@ -1032,26 +1055,27 @@ const POSES = {
     return card;
   }
 
-  function setKcal(i, v){ const d = dayIso(i); if (v == null) delete state.kcal[d]; else state.kcal[d] = v; renderSoft(); persist(); }
+  const FREE_LIMIT = 800;
+  function setKcal(i, v, free){ const d = dayIso(i); if (v == null) delete state.kcal[d]; else state.kcal[d] = v; if (free) state.free[d] = true; else delete state.free[d]; renderSoft(); persist(); }
   function kcalEditor(i){
-    const v = kcalOf(i), mode = v == null ? null : v === 0 ? 'ok' : v > 0 ? 'over' : 'under';
+    const v = kcalOf(i), isFree = !!state.free[dayIso(i)], mode = v == null ? null : isFree ? 'free' : v === 0 ? 'ok' : v > 0 ? 'over' : 'under';
     const wrap = el('div', {class:'kced'});
     const seg = el('div', {class:'seg'});
-    [['ok','В норме'],['over','Перебор'],['under','Недобор']].forEach(([m, txt]) => {
+    [['ok','В норме'],['over','Перебор'],['under','Недобор'],['free','Свободный']].forEach(([m, txt]) => {
       const b = el('button', {type:'button', 'aria-pressed': m === mode ? 'true' : 'false', text:txt});
-      b.addEventListener('click', () => setKcal(i, m === 'ok' ? 0 : m === 'over' ? (v > 0 ? v : 300) : (v < 0 ? v : -300)));
+      b.addEventListener('click', () => m === 'free' ? setKcal(i, v > 0 ? v : 700, true) : setKcal(i, m === 'ok' ? 0 : m === 'over' ? (v > 0 ? v : 300) : (v < 0 ? v : -300)));
       seg.append(b);
     });
     wrap.append(seg);
-    if (mode === 'over' || mode === 'under'){
-      const sign = mode === 'over' ? 1 : -1;
+    if (mode === 'over' || mode === 'under' || mode === 'free'){
+      const sign = mode === 'under' ? -1 : 1;
       const inp = el('input', {type:'number', id:'kc-' + i, step:'50', min:'50', max:'6000', inputmode:'numeric', 'aria-label':'На сколько ккал'});
       inp.value = Math.abs(v);
-      inp.addEventListener('change', () => { const n = parseInt(inp.value, 10); if (!isNaN(n) && n > 0) setKcal(i, sign*n); });
-      const row = el('div', {class:'kcrow'}, [el('span', {class:'muted', text: mode === 'over' ? 'на +' : 'на −'}), inp, el('span', {class:'muted', text:'ккал'})]);
-      (mode === 'over' ? [200, 500, 1000, 1500] : [200, 500]).forEach(q => { const b = el('button', {type:'button', class:'q', text:(sign > 0 ? '+' : '−') + q}); b.addEventListener('click', () => setKcal(i, sign*q)); row.append(b); });
+      inp.addEventListener('change', () => { const n = parseInt(inp.value, 10); if (!isNaN(n) && n > 0) setKcal(i, sign*n, isFree); });
+      const row = el('div', {class:'kcrow'}, [el('span', {class:'muted', text: sign > 0 ? 'на +' : 'на −'}), inp, el('span', {class:'muted', text:'ккал'})]);
+      (mode === 'free' ? [500, 700, 800] : mode === 'over' ? [200, 500, 1000, 1500] : [200, 500]).forEach(q => { const b = el('button', {type:'button', class:'q', text:(sign > 0 ? '+' : '−') + q}); b.addEventListener('click', () => setKcal(i, sign*q, isFree)); row.append(b); });
       wrap.append(row);
-      wrap.append(el('p', {class:'note', text: mode === 'over' ? 'Сверх нормы ' + KCAL + '. Читмил обычно +1000–1500.' : 'Меньше нормы ' + KCAL + '. Сильный недобор на сушке так же плох, как перебор.'}));
+      wrap.append(el('p', {class:'note', text: mode === 'free' ? 'Свободный приём: раз в неделю до +' + FREE_LIMIT + ' не портит оценку. Всё, что сверх, считается перебором.' : mode === 'over' ? 'Сверх нормы ' + KCAL + '. Читмил обычно +1000–1500.' : 'Меньше нормы ' + KCAL + '. Сильный недобор так же плох, как перебор.'}));
     }
     if (v != null){ const r = el('button', {type:'button', class:'linkbtn', text:'Сбросить'}); r.addEventListener('click', () => setKcal(i, null)); wrap.append(r); }
     return wrap;
@@ -1066,8 +1090,9 @@ const POSES = {
     const sp = specialOf(i);
     if (sp && sp.kx) return el('div', {class:'kc ex', title:'Не входит в оценку питания', text: sp.kx});
     const v = kcalOf(i);
-    const cls = 'kc' + (v == null ? '' : v === 0 ? ' ok' : Math.abs(v) > 400 ? ' bad' : ' mid') + (kcOpen === i ? ' open' : '');
-    const b = el('button', {type:'button', class:cls, 'aria-label':'Калории, ' + fmtD(addDays(START, i)), text: v == null ? 'ккал' : v === 0 ? 'норма' : signed(v)});
+    const fr = !!state.free[dayIso(i)];
+    const cls = 'kc' + (v == null ? '' : fr ? (v > FREE_LIMIT ? ' mid' : ' ok') : v === 0 ? ' ok' : Math.abs(v) > 400 ? ' bad' : ' mid') + (kcOpen === i ? ' open' : '');
+    const b = el('button', {type:'button', class:cls, 'aria-label':'Калории, ' + fmtD(addDays(START, i)), text: v == null ? 'ккал' : fr ? 'своб' : v === 0 ? 'норма' : signed(v)});
     b.addEventListener('click', () => { kcOpen = kcOpen === i ? null : i; renderWeeks(); });
     return b;
   }
@@ -1094,7 +1119,7 @@ const POSES = {
       const block = el('div', {class:'wk2' + (n === curWeek ? ' now' : ''), id:'week-' + n}, [
         el('div', {class:'wk-head'}, [
           el('div', {}, [el('span', {class:'n', text:'Н' + n}), el('span', {class:'d', text:fmtD(s) + ' – ' + fmtD(e)})]),
-          el('div', {class:'wk-side'}, [el('span', {class:'num', text: avg == null ? '—' : kg(avg)}), el('span', {text: n === 1 ? 'цель ≈ ' + kg(START_KG) : 'цель ' + kg(lo) + '–' + kg(hi)})])
+          el('div', {class:'wk-side'}, [el('span', {class:'num', text: avg == null ? '—' : kg(avg)}), el('span', {text: n >= 6 ? (lo == null ? 'держим вес' : 'держим ' + kg(lo) + '–' + kg(hi)) : n === 1 ? 'цель ≈ ' + kg(START_KG) : 'цель ' + kg(lo) + '–' + kg(hi)})])
         ]),
         el('div', {class:'ph'}, [el('span', {class:tagCls, text:wk.ph}), el('span', {class:'txt', text:wk.note})]),
         grid
@@ -1139,7 +1164,7 @@ const POSES = {
   }
 
   function renderTests(){
-    const t = $('tests'); t.textContent = '';
+    const t = $('tests'); if (!t) return; t.textContent = '';
     const head = el('tr', {}, [el('th', {text:'Замер'})].concat(CPS.map(c => {
       const th = el('th', {class: c.id === 't0' ? '' : 'cp'}); th.append(el('b', {text:c.label}), 'нед '+c.week+' · '+c.when); return th;
     })).concat([el('th', {text:'Цель к финалу'})]));
@@ -1199,7 +1224,7 @@ const POSES = {
     GOAL_KG = isNaN(g) ? Math.round((START_KG - 2.5)*10)/10 : g;
     $('in-start').value = START_KG; $('in-goal').value = GOAL_KG;
     const kc = parseInt(state.settings && state.settings.kcal, 10);
-    KCAL = isNaN(kc) ? 2550 : kc; $('in-kcal').value = KCAL;
+    KCAL = isNaN(kc) ? 2700 : kc; $('in-kcal').value = KCAL;
   }
   $('in-kcal').addEventListener('change', () => {
     const v = parseInt($('in-kcal').value, 10);
@@ -1245,6 +1270,7 @@ const POSES = {
         state.settings = Object.assign({}, state.settings, p.settings || {});
         state.kcal = Object.assign({}, state.kcal, p.kcal || {});
         state.march = Object.assign({}, state.march, p.march || {});
+        state.free = Object.assign({}, state.free, p.free || {});
         migrateWeeks();
         applySettings(); renderAll(); persist();
         bnote('Восстановлено: ' + n + ' взвеш. Новые записи добавлены к текущим.');
@@ -1469,7 +1495,7 @@ const POSES = {
   }
 
   // ---------- tabs ----------
-  const PAGES = ['today','weeks','train','tests','more','march'];
+  const PAGES = ['today','weeks','train','more','march'];
   function showPage(p){
     if (!PAGES.includes(p)) p = 'today';
     PAGES.forEach(q => { $('p-'+q).classList.toggle('on', q===p); });
@@ -1484,11 +1510,12 @@ const POSES = {
   let loaded = false;
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; state.kcal = p.kcal || {}; state.march = p.march || {}; loaded = true; }
+    if (raw){ const p = JSON.parse(raw); state.log = p.log || {}; state.weeks = p.weeks || {}; state.tests = p.tests || {}; state.settings = p.settings || {}; state.kcal = p.kcal || {}; state.march = p.march || {}; state.free = p.free || {}; loaded = true; }
   } catch(e){}
   if (!loaded){ state.log = Object.assign({}, SEED.log); persist(); }
   function migrateWeeks(){ let ch = false; Object.values(state.weeks).forEach(w => { if (!w || !w.d) return; Object.entries(MIGRATE).forEach(([o, ns]) => { if (w.d[o]) { ns.forEach(n => w.d[n] = true); delete w.d[o]; ch = true; } }); }); return ch; }
   if (migrateWeeks()) persist();
+  if (!state.settings.recompSet){ state.settings = Object.assign({}, state.settings, {recompSet: true, kcal: 2700}); persist(); }
   applySettings();
   renderAll(); renderTrain(); renderMarch();
   (() => { let p = 'today'; try { p = localStorage.getItem(KEY+'-tab') || 'today'; } catch(e){} if (location.hash.length > 1) p = location.hash.slice(1); showPage(p); })();
