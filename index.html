@@ -159,6 +159,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body)
 .kc.ex{border-style:solid;border-color:var(--line);background:var(--mark-soft);color:var(--mark);cursor:default;text-align:center}
 #p-march .linkbtn{margin-bottom:4px}
 
+/* weigh-in */
+.wi{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--danger)}
+.wi-h{font:700 18px var(--f-display);color:var(--danger)}
+.wi-rows{display:flex;flex-direction:column;gap:4px}
+.wi-r{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.wi-r b{font-family:var(--f-mono);font-size:14px}
+.wi-st{font-size:13.5px;font-weight:600;padding:8px 10px;border-radius:8px}
+.wi-st.ok{background:var(--accent-soft);color:var(--accent)}
+.wi-st.mid{background:var(--mark-soft);color:var(--mark)}
+.wi-st.bad{background:var(--danger);color:var(--surface)}
 /* day bar */
 .daybar{display:grid;grid-template-columns:52px minmax(0,1fr) 52px;align-items:center;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);z-index:4;background:var(--bg);padding-block:6px}
 .db-arrow{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:28px;line-height:1;cursor:pointer}
@@ -393,6 +403,7 @@ ol.ex li .hint{grid-column:2 / 4;font-size:12.5px;color:var(--muted)}
   <!-- ===== Сегодня ===== -->
   <section class="page on" id="p-today" role="tabpanel">
     <div id="backup-banner" hidden></div>
+    <div id="wi-banner" hidden></div>
     <div id="march-banner" hidden></div>
     <div class="daybar" id="daybar"></div>
     <section class="card" id="today-log" aria-label="Отметки за день"></section>
@@ -784,7 +795,7 @@ const POSES = {
   const PHASE_NAME = {cut:'Сушка', recomp:'Рекомпозиция', maint:'Поддержка'};
   const PHASE_KCAL = {cut:'2450–2550', recomp:'около 2700', maint:'2850–2900'};
   const HOLD_W = {recomp:0.3, maint:0.5};
-  function phases(){ return [{from:0, type:'cut'}, {from:35, type:'recomp'}].concat(state.phases || []).sort((a, b) => a.from - b.from); }
+  function phases(){ return [{from:0, type:'cut'}, {from:35, type:'recomp'}, {from:45, type:'cut', wi:true}, {from:56, type:'recomp'}].concat(state.phases || []).sort((a, b) => a.from - b.from); }
   function phaseAt(i){ let p = phases()[0]; phases().forEach(x => { if (x.from <= i) p = x; }); return p; }
   const isHold = i => phaseAt(i).type !== 'cut';
   function phaseBase(p){
@@ -793,6 +804,7 @@ const POSES = {
   }
   const cutBand = w => { const k = Math.max(0, w-1); return [START_KG - 0.35*k, START_KG - 0.2*k]; };
   const band = w => {
+    if (w === 7 || w === 8){ const tg = wiTarget(Math.min(w*7 - 1, WI.day)); if (tg != null) return [tg - 0.3, tg]; }
     const p = phaseAt((w - 1)*7);
     if (p.type === 'cut' && p.from === 0) return cutBand(w);
     const b = phaseBase(p); if (b == null) return [null, null];
@@ -803,6 +815,8 @@ const POSES = {
   const curWeek = Math.max(1, Math.floor((new Date() - START)/DAY/7) + 1);
   const NW = Math.max(12, curWeek + 1); // weeks shown: the 12-week plan, then they keep going
   function weekInfo(n){
+    if (n === 8) return {ph:'Сгонка', cp:true, note:'Взвешивание в субботу 28 ноября, лимит 74,0. Чт и пт — «сухие» дни, сб — соревнования.'};
+    if (n === 7) return {ph:'Сгонка', cp:true, note:'После болезни — мягкое возвращение. С четверга норма 2300, белок 150–160.'};
     const ph = PHASE_NAME[phaseAt((n - 1)*7).type];
     if (n <= 12){ const w = WEEKS[n-1]; return n >= 9 && w.ph === 'Дальше по решению' ? Object.assign({}, w, {ph}) : w; }
     return {ph, note:''};
@@ -834,10 +848,11 @@ const POSES = {
     }
     const [lo, hi] = band(curWeek);
     const pNow = phaseAt(idx(todayIso));
-    if (pNow.type !== 'cut'){ $('st-band').textContent = lo == null ? '—' : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = lo == null ? 'точка отсчёта: ср–вс' : 'держим вес'; }
+    if (curWeek === 7 || curWeek === 8){ $('st-band').textContent = lo == null ? '—' : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = 'по плану сгонки, к концу недели'; }
+    else if (pNow.type !== 'cut'){ $('st-band').textContent = lo == null ? '—' : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = lo == null ? 'точка отсчёта: ср–вс' : 'держим вес'; }
     else if (pNow.from > 0){ $('st-band').textContent = lo == null ? '—' : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = 'к концу ' + curWeek + '-й недели'; }
     else { $('st-band').textContent = curWeek === 1 ? '≈ ' + kg(START_KG) : kg(lo) + '–' + kg(hi); $('st-band-s').textContent = curWeek === 1 ? 'вернуться к воскресенью' : 'к концу ' + curWeek + '-й недели'; }
-    renderVerdict(); renderToday(); renderTodayLog(); renderSums(); renderMarchBanner(); renderBackupBanner();
+    renderVerdict(); renderToday(); renderTodayLog(); renderSums(); renderMarchBanner(); renderWeighinBanner(); renderBackupBanner();
   }
   function renderVerdict(){
     const v = $('verdict');
@@ -924,7 +939,7 @@ const POSES = {
     const W = 720, H = 270, L = 44, R = 14, T = 22, B = 30;
     const list = entries();
     const vals = list.map(e=>e.kg);
-    let yMin = Math.min(START_KG-4.5, GOAL_KG-1, ...vals), yMax = Math.max(START_KG+1, ...vals);
+    let yMin = Math.min(START_KG-4.5, GOAL_KG-1, WI.goal - 0.5, ...vals), yMax = Math.max(START_KG+1, ...vals);
     yMin = Math.floor(yMin - 0.2); yMax = Math.ceil(yMax + 0.2);
     const ND = NW*7, X = i => L + (i/ND) * (W-L-R);
     const Y = v => T + (yMax - v)/(yMax - yMin) * (H-T-B);
@@ -943,7 +958,7 @@ const POSES = {
     const ph = phases();
     ph.forEach((p, k) => {
       const a = p.from, z = k + 1 < ph.length ? ph[k+1].from : ND;
-      if (z <= a) return;
+      if (z <= a || p.wi) return;
       if (p.type === 'cut' && p.from === 0){ const [lo5, hi5] = cutBand(Math.ceil(z/7) + 1); s += `<polygon points="${X(7)},${Y(START_KG)} ${X(z)},${Y(hi5)} ${X(z)},${Y(lo5)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`; return; }
       const b = phaseBase(p); if (b == null) return;
       if (p.type === 'cut'){ const n = (z - a)/7; s += `<polygon points="${X(a)},${Y(b)} ${X(z)},${Y(b - 0.2*n)} ${X(z)},${Y(b - 0.35*n)}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1" stroke-opacity=".5"/>`; return; }
@@ -954,7 +969,7 @@ const POSES = {
     // review line
     // checkpoints
     ph.forEach(p => {
-      const i = p.from, t = {cut:'сушка', recomp:'рекомп.', maint:'поддержка'}[p.type], right = i > ND*0.85;
+      const i = p.from, t = p.wi ? 'сгонка' : {cut:'сушка', recomp:'рекомп.', maint:'поддержка'}[p.type], right = i > ND*0.85;
       s += `<line x1="${X(i)}" x2="${X(i)}" y1="${T}" y2="${H-B}" stroke="var(--mark)" stroke-width="1" stroke-opacity=".6"/>`;
       s += `<text x="${X(i)+(right?-4:4)}" y="${T+11}" text-anchor="${right?'end':'start'}" style="fill:var(--mark)">${t}</text>`;
     });
@@ -971,6 +986,11 @@ const POSES = {
     }
     // today marker
     const ti = idx(todayIso);
+    if (ND >= WI.day){
+      s += `<line x1="${X(WI.from - 7)}" x2="${X(WI.day + 3)}" y1="${Y(WI.limit)}" y2="${Y(WI.limit)}" stroke="var(--danger)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${X(WI.from - 7)}" y="${Y(WI.limit) + 12}" style="fill:var(--danger)">лимит 74</text>`;
+      const s0 = wiStart();
+      if (s0 != null) s += `<line x1="${X(WI.from - 1)}" y1="${Y(s0)}" x2="${X(WI.day)}" y2="${Y(WI.goal)}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 3"/><circle cx="${X(WI.day)}" cy="${Y(WI.goal)}" r="4" fill="var(--accent)"/>`;
+    }
     if (ti >= 0 && ti <= ND) s += `<line x1="${X(ti)}" x2="${X(ti)}" y1="${H-B}" y2="${H-B+5}" stroke="var(--ink)" stroke-width="2"/>`;
     if (!list.length) s += `<text x="${(L+W-R)/2}" y="${Y(START_KG)-14}" text-anchor="middle" style="font-size:12px;fill:var(--ink)">Первое взвешивание появится здесь</text>`;
     svg.innerHTML = s;
@@ -1036,12 +1056,32 @@ const POSES = {
     '2026-11-01': {sched:[{k:'march2', t:'Марш', w:6}], kx:'марш', note:'Марш, день 2. После финиша ешь на поддержку, около 2900 ккал.', plan:[]},
     '2026-11-02': {sched:[], kx:'восст', note:'Отдых после марша. Ешь около 2900 ккал, белок 140+. На вес не смотри до четверга.', plan:[]},
     '2026-11-03': {sched:[{k:'tue_dance', t:'Танцы', w:2}], note:'Лёгкие танцы. Хват и шпагат по самочувствию.', plan:[]},
+    '2026-11-18': {note:'Завтра начинается сгонка к соревнованиям 28 ноября. Сегодня ещё долечиваешься: борьбу пропусти, прогулка и спокойный шпагат. Завтра утром взвесься натощак.'},
+    '2026-11-19': {note:'Сгонка: норма 2300, белок 150–160 г. Углеводы — в основном до и после тренировки. Танцы в лёгком темпе, если нет температуры.'},
+    '2026-11-20': {note:'Норма 2300. Борьба — техника и лёгкая работа, без спаррингов на максимум: ты после болезни.'},
+    '2026-11-21': {note:'Норма 2300. Бег 3–5 км легко. На турнике на подход меньше и без добавления веса.'},
+    '2026-11-22': {note:'Контроль: сравни вес с целью на плашке сверху. Отстаёшь больше чем на 0,3 кг — с понедельника норма 2100 и 30–40 минут ходьбы каждый день.'},
+    '2026-11-23': {note:'Норма 2300. Обычная тренировка, но без новых рекордов: силы нужны к субботе.'},
+    '2026-11-24': {note:'Норма 2300. Танцы. Хват по желанию.'},
+    '2026-11-25': {note:'Последняя полноценная борьба перед соревнованиями. Без рискованных спаррингов. Норма 2300.'},
+    '2026-11-26': {sched:[{k:'thu_dance', t:'Танцы', w:2}], kx:'сгон', plan:[], note:'Первый «сухой» день: около 2000 ккал, углеводы 120–150 г, белок 160 г. Меньше соли: без солёных снеков, соусов, колбасы, сыра. Мало клетчатки: без капусты, бобовых, сырых овощей горой. Воду пей как обычно, 2,5–3 л. Танцы лёгкие или отдых.'},
+    '2026-11-27': {sched:[], kx:'сгон', plan:[], note:'Второй «сухой» день, те же правила: 1800–2000 ккал, лёгкий ужин до 19:00. Воду не урезай; после ужина — по жажде, небольшими глотками. Борьбу пропусти. Вечером собери форму и документы, лечь пораньше.'},
+    '2026-11-28': {sched:[{k:'comp', t:'Соревн.', w:6}], kx:'соревн', plan:[], note:'Утром взвесься дома натощак после туалета. После официального взвешивания: 0,5–1 л воды с щепоткой соли, банан или хлеб с мёдом, через час-полтора — нормальная еда: рис или макароны с курицей. Между схватками — вода маленькими глотками, банан, гематоген.'},
+    '2026-11-29': {sched:[], kx:'восст', plan:[], note:'Отдых. Ешь на поддержку, около 2800–2900 ккал, белок 140+. Вес 2–3 дня будет выше из-за воды — это нормально. С понедельника снова рекомпозиция, норма 2700.'},
     '2026-11-09': {note:'С сегодня — рекомпозиция: норма 2700, белок 140–160, один свободный приём в неделю. Замеров больше нет: обычная тренировка, прибавляй вес в подтягиваниях и брусьях.'},
   };
   const specialOf = i => SPECIAL[dayIso(i)] || null;
   const schedFor = i => { const s = specialOf(i); return s && s.sched ? s.sched : (i >= 35 ? SCHED2 : SCHED)[i%7]; };
-  const WEIGHT_SKIP = [25, 30]; // 30 Oct – 4 Nov: water and glycogen swing after the march
-  const skipW = j => j >= WEIGHT_SKIP[0] && j <= WEIGHT_SKIP[1];
+  // water and glycogen swings: after the march (30 Oct – 4 Nov) and after the weigh-in (28–30 Nov)
+  const WEIGHT_SKIPS = [[25, 30], [54, 56]];
+  const skipW = j => WEIGHT_SKIPS.some(([a, b]) => j >= a && j <= b);
+  // competition 28 Nov: the limit is 74.0, aim for 73.5 on the home scale; the cut runs 19–27 Nov
+  const WI = {day:54, limit:74.0, goal:73.5, from:45};
+  function wiStart(){
+    const r = avgRange(WI.from - 4, WI.from - 1); if (r) return r.v;
+    const prev = entries().filter(e => idx(e.date) < WI.from); return prev.length ? prev[prev.length-1].kg : null;
+  }
+  function wiTarget(i){ const s0 = wiStart(); if (s0 == null) return null; const k = Math.min(1, Math.max(0, (i - (WI.from - 1))/(WI.day - (WI.from - 1)))); return s0 + (WI.goal - s0)*k; }
 
   const MARCH_BUY = [
     ['b-nuts','Орехи: миндаль, кешью, арахис','2 пачки по 200 г'],
@@ -1104,6 +1144,33 @@ const POSES = {
       tl.append(el('div', {class:'mday' + (d === todayIso ? ' on' : '')}, [el('b', {text: DOW[i%7] + ' ' + fmtD(dt)}), el('span', {text: SPECIAL[d].note})]));
     });
     renderMarchProgress();
+  }
+  function renderWeighinBanner(){
+    const b = $('wi-banner'); if (!b) return; b.textContent = '';
+    const t = idx(todayIso);
+    if (t < 44 || t > WI.day){ b.hidden = true; return; }
+    b.hidden = false;
+    const left = WI.day - t, s0 = wiStart(), tg = wiTarget(t);
+    const lastE = entries().filter(e => idx(e.date) <= t && !skipW(idx(e.date))).slice(-1)[0];
+    const box = el('div', {class:'wi'});
+    box.append(el('span', {class:'eyebrow', text:'Соревнования · сб 28 ноября · лимит 74,0'}));
+    box.append(el('b', {class:'wi-h', text: left > 0 ? 'До взвешивания ' + left + ' ' + plural(left, 'день', 'дня', 'дней') : 'Сегодня взвешивание'}));
+    const rows = el('div', {class:'wi-rows'});
+    const row = (k, v, cls) => rows.append(el('div', {class:'wi-r' + (cls ? ' ' + cls : '')}, [el('span', {text:k}), el('b', {text:v})]));
+    if (lastE) row('Последний вес', kg(lastE.kg) + ' · ' + (idx(lastE.date) === t ? 'сегодня' : fmtD(parse(lastE.date))));
+    if (tg != null && t >= WI.from) row('Цель на сегодня', '≤ ' + kg(tg));
+    row('Цель на утро 28-го', '≤ ' + kg(WI.goal) + ' (запас 0,5)');
+    box.append(rows);
+    if (s0 == null) box.append(el('p', {class:'note', text:'Взвесься утром натощак — от этого веса посчитается цель на каждый день.'}));
+    else if (left === 0 && lastE && idx(lastE.date) === t){
+      const m = WI.limit - lastE.kg;
+      box.append(el('p', {class:'wi-st ' + (m >= 0.3 ? 'ok' : m >= 0 ? 'mid' : 'bad'), text: m >= 0 ? 'Проходишь: запас ' + kg(m) + ' кг до лимита. Удачи!' : 'Выше лимита на ' + kg(-m) + ' кг на домашних весах. Сходи в туалет, разомнись в тёплой одежде 15–20 минут и взвесься снова. Воду и еду — только после взвешивания.'}));
+    }
+    else if (lastE && tg != null && t >= WI.from){
+      const d = lastE.kg - wiTarget(idx(lastE.date));
+      box.append(el('p', {class:'wi-st ' + (d <= 0.1 ? 'ok' : d <= 0.3 ? 'mid' : 'bad'), text: d <= 0.1 ? 'В графике. Так держать.' : d <= 0.3 ? 'Чуть выше графика (+' + kg(d) + '). Одно взвешивание мало что значит — смотри завтра.' : 'Отстаёшь на ' + kg(d) + ' кг. ' + (t <= 51 ? 'Норма −200 ккал и 30–40 минут ходьбы каждый день до среды.' : 'Держи «сухие» правила строго, ужин полегче.')}));
+    }
+    b.append(box);
   }
   function renderMarchBanner(){
     const b = $('march-banner'); b.textContent = '';
@@ -1354,7 +1421,7 @@ const POSES = {
     if (schedFor(i).length) schedFor(i).forEach(x => row.append(sesButton(i, x)));
     else row.append(el('span', {class:'muted', text: (specialOf(i) && specialOf(i).rest === 'старт') ? 'Сегодня без тренировок: вечером старт марша.' : 'Сегодня отдых.'}));
     const sp = specialOf(i);
-    if (sp && sp.kx) box.append(el('h2', {text:ttl}), row, el('p', {class:'note', text: sp.kx === 'марш' ? 'Калории сегодня не считаются: ешь столько, сколько нужно для марша.' : sp.kx === 'загр' ? 'Калории сегодня не идут в оценку: это загрузка перед маршем, +300–500 углеводами.' : 'Калории сегодня не идут в оценку: восстановление, около 2900 ккал.'}));
+    if (sp && sp.kx) box.append(el('h2', {text:ttl}), row, el('p', {class:'note', text: sp.kx === 'сгон' ? 'Калории сегодня не идут в оценку: «сухой» день перед взвешиванием, около 2000 ккал, мало соли и клетчатки.' : sp.kx === 'соревн' ? 'День соревнований: калории не считаются. После взвешивания ешь и пей нормально.' : sp.kx === 'марш' ? 'Калории сегодня не считаются: ешь столько, сколько нужно для марша.' : sp.kx === 'загр' ? 'Калории сегодня не идут в оценку: это загрузка перед маршем, +300–500 углеводами.' : 'Калории сегодня не идут в оценку: восстановление, около 2900 ккал.'}));
     else box.append(el('h2', {text:ttl}), row, el('div', {class:'kced-title', text:(isToday ? 'Калории сегодня' : 'Калории за ' + fmtD(addDays(START, i))) + ' · норма ' + KCAL}), kcalEditor(i));
     box.append(dayExtras(i));
   }
@@ -2061,6 +2128,17 @@ const POSES = {
     if (!state.history.some(h => h.key === 'kcal')) past.push({at:'2026-11-09T00:20:00.000Z', type:'setting', key:'kcal', label:'Норма ккал', from:2450, to:2700, note:'переход на рекомпозицию; до этого 2550 → 2450, дата неизвестна'});
     state.history = past.concat(state.history).sort((x, y) => x.at < y.at ? -1 : 1);
     state.settings = Object.assign({}, state.settings, {histSeeded: true}); persist();
+  }
+  {
+    const t = idx(todayIso);
+    if (t >= 44 && t <= 53 && !state.settings.wiNormSet){
+      logEvent({type:'setting', key:'kcal', label:'Норма ккал', from: state.settings.kcal == null ? null : state.settings.kcal, to:2300, note:'сгонка к соревнованиям 28 ноября, лимит 74 кг'});
+      state.settings = Object.assign({}, state.settings, {kcal:2300, wiNormSet:true}); persist();
+    }
+    if (t >= 55 && state.settings.wiNormSet && !state.settings.wiNormBack){
+      logEvent({type:'setting', key:'kcal', label:'Норма ккал', from: state.settings.kcal == null ? null : state.settings.kcal, to:2700, note:'после соревнований, снова рекомпозиция'});
+      state.settings = Object.assign({}, state.settings, {kcal:2700, wiNormBack:true}); persist();
+    }
   }
   if (!state.settings.plan3Set){
     if (state.settings.plan2Set) logEvent({type:'plan', text:'Шпагат и стойка у стены — после борьбы (ср, пт), шпагат дома — в понедельник. Стойка убрана из домашних тренировок.'});
